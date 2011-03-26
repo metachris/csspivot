@@ -10,7 +10,7 @@ function preview(showdialog) {
     form.setAttribute("action", "/preview");
     
     // setting form target to a window named 'formresult'
-    form.setAttribute("target", "previewWindow");
+    //form.setAttribute("target", "previewWindow");
     form.style.display = "none";
     
     var hiddenField = document.createElement("input");              
@@ -34,9 +34,11 @@ function preview(showdialog) {
         hiddenField.setAttribute("value", "1");
         form.appendChild(hiddenField);
     }
-    
+
     document.body.appendChild(form);
-        
+    form.submit();
+    
+    /*
     if (!previewWindow || previewWindow.closed) {
         // opens a new window with the edit
         previewWindow = window.open("/preview", 'previewWindow',
@@ -44,8 +46,8 @@ function preview(showdialog) {
     } else {
         previewWindow.focus();
     }
-
-    form.submit();
+    */
+    
 }
 
 

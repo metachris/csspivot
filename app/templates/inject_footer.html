@@ -25,7 +25,7 @@
 $(document).ready(function() {
 	$(".csspivot_btn").button();
     $("#csspivot_cssdialog").dialog({ autoOpen: {% if showdialog %}true{% else %}false{% endif %}, width: 400, buttons: [
-        { text: "Preview", click: function() { preview(false); }},
+        { text: "Preview", click: function() { preview(true); }},
         { text: "Save", click: function() { if (previewWindow) previewWindow.close(); $("#csspivot_form").submit(); }}
     ], resize: function(event, ui) { 
         h = document.getElementById("csspivot_cssdialog").style.height;
