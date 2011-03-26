@@ -1,29 +1,23 @@
 <style type="text/css">
-#csspivot {
-    padding:2px 4px;
-    border-bottom:1px solid gray;
-    background:white; 
-    font:13px/1.231 arial;
-    text-align:left;
-}
-#csspivot a {
-    color:#16387C;
-    text-decoration:none;
-}
-#csspivot a:hover {
-    text-decoration:underline;
-}
+    #csspivot {
+        padding:2px 4px;
+        border-bottom:1px solid gray;
+        background:white; 
+        font:13px/1.231 arial;
+        text-align:left;
+    }
+    #csspivot a {
+        color:#16387C;
+        text-decoration:none;
+    }
+    #csspivot a b {
+        font-weight:bold;
+    }
+    #csspivot a:hover {
+        text-decoration:underline;
+    }
+</style>
 
-</style> 
-{% if id %}
-<script type="text/javascript">
-    recent = localStorage.getItem("pivots_recentlyviewed");
-    recent = recent.replace("{{ id }},", "") + "{{ id }},";
-    localStorage.setItem("pivots_recentlyviewed", recent);
-    localStorage.setItem("pivots_recentlyviewed_{{ id }}_comment", "{{ comment }}");
-    localStorage.setItem("pivots_recentlyviewed_{{ id }}_url", "{{ url }}");
-</script>
-{% endif %}
 <div id='csspivot' style="">
     <a href=" /"><b>CSS Pivot</b></a> 
     <small>
@@ -31,7 +25,8 @@
         &middot; <a href=" /{{ id }}">{{ id }}</a>
         &middot; <a href=" /{{ id }}/details">view stylesheet</a>
     {% else %}
-        &middot; preview
+        &middot; <a href="javascript:showcss()">custom styles</a>
     {% endif %}
     </small> 
 </div>
+

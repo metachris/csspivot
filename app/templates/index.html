@@ -10,64 +10,9 @@ if (Modernizr.localstorage) {
 }
 </script>
 <br>
-<table>
-<tr>
-<td>
 <h2>New Pivot</h2>
-<form action="/" method="post">
-<table id='table_details'>
-    <tr>
-        <td class='info'>URL:</td><td><input type="text" id="url" name="url" value="{{ pivot.url }}" /></td>
-    </tr><tr>
-<!--        <td class='info'>Title:</td><td><input type="text" name="title" value="{{ pivot.title }}" /></td>
-    </tr><tr>
--->
-        <td class='info'>CSS:</td><td><textarea name="css" id="css" rows="14" cols="50">{{ pivot.css }}</textarea></td>
-    </tr><tr>
-        <td class='info'>Comment:</td><td><input type="comment" id="comment" name="comment" value="{{ pivot.title }}" /></td>
-    </tr><tr>
-        <td></td><td><input type="button" onclick="preview()" value="Preview" /> <input type="submit" value="Save new pivot" /></td>
-    </tr>
-</table>
+<form action="/preview" method="get">
+    <input type="text" id="url" name="url" value="{{ pivot.url }}" />
+    <input type="submit" />
 </form>
-
-</td><td style="padding-left:40px;">
-{% if prefs %}
-<h2>Your Pivots</h2>
-<ul>
-{% for project in prefs.project_set %}
-    <li>{{ project.url }}
-    <ul>
-    {% for pivot in project.pivot_set %}
-        <li><a href="/{{ pivot.id }}/details">{{ pivot.id }} &middot; {{ pivot.comment }}</a></li>
-    {% endfor %}
-    </ul></li>
-{% endfor %}
-
-</ul>
-
-{% else %}
-<div style="width:300px;">
-Please sign in to manage your pivots. You'll also have nice statistics, and free beer!
-</div>
-<br>
-<p>Recently viewed:</p>
-<div id="_recent"></div>
-<script type="text/javascript">
-    recent = localStorage.getItem("pivots_recentlyviewed");
-    out = "";
-    arr = recent.split(",");
-    for (i in arr) {
-        if (arr[i] != "") {
-            comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
-            url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
-            out += "<li><a href='/" + arr[i] + "/details'>" + arr[i] + "</a> (" + url + " &middot; " + comment + ")</li>";
-        }
-    }
-    document.getElementById("_recent").innerHTML = "<ul>" + out + "</ul>";
-</script>
-{% endif %}   
-</td>
-</tr>
-</table>
 {% endblock %}

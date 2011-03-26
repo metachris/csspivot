@@ -39,7 +39,7 @@ handlers:
   static_files: static/\1
   upload: static/(robots\.txt|humans\.txt|crossdomain\.xml)
 
-- url: /img/(.*\.(gif|png|jpg))
+- url: /images/(.*\.(gif|png|jpg))
   static_files: static/img/\1
   upload: static/img/(.*\.(gif|png|jpg))
   

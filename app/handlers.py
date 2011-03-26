@@ -160,8 +160,9 @@ class AssestHandler(webapp.RequestHandler):
 
 
 def proxy(url, css, comment, id=None):
-    if not url or not css:
-        return
+    if not url:
+        return "Not a valid url (%s)" % url
+
     if not "http://" in url and not "https://" in url:
         url = "http://%s" % url
 
@@ -172,8 +173,13 @@ def proxy(url, css, comment, id=None):
         logging.warning("urlfetch error [%s]" % url)
         return "URL Invalid (%s)" % url
 
-    encoding = result.headers['content-type'].split('charset=')[-1]
-    res = unicode(result.content, encoding)
+    logging.info(result.headers)
+    try:
+        encoding = result.headers['content-type'].split('charset=')[-1]
+        logging.info(encoding)
+        res = unicode(result.content, encoding)
+    except:
+        res = unicode(result.content)
 
     # Inject header html
     header = template.render(tdir + "inject_header.html", \
@@ -188,7 +194,15 @@ def proxy(url, css, comment, id=None):
 
     # Update links
     res = res.replace('src="/', 'src="%s/' % url.strip("/"))
+    res = res.replace("src='/", "src='%s/" % url.strip("/"))
+    res = res.replace("'/", "'%s/" % url.strip("/"))
     res = res.replace('href="/', 'href="%s/' % url.strip("/"))
+    res = res.replace('url(/', 'url(%s/' % url.strip("/"))
+
+    # Inject footer html
+    footer = template.render(tdir + "inject_footer.html", \
+            {'id': id, 'url': url, 'css': css, 'comment': comment})
+    res = res.replace("</body", "%s</body" % footer)
 
     return res
 
@@ -244,6 +258,9 @@ class PivotDetails(webapp.RequestHandler):
 
 class Preview(webapp.RequestHandler):
     def post(self):
+        return self.get()
+
+    def get(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
 
@@ -251,5 +268,8 @@ class Preview(webapp.RequestHandler):
         css = urllib.unquote(decode(self.request.get('css')))
         comment = decode(self.request.get('comment'))
 
+        #self.response.out.write(template.render(tdir + "pivot_preview.html", \
+        #        {"prefs": prefs, 'url': url, 'css': css}))
+        #return
         res = proxy(url, css, comment)
         self.response.out.write(res)

@@ -4,6 +4,8 @@
  * Author: 
  */
 
+html, body { height:100%; }
+
 body, select, input, textarea {
   /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
   color: #444;
@@ -38,6 +40,12 @@ a:hover {
 
 #header #side {
     text-align:right;
+}
+
+
+#container {
+    width:640px;
+    margin:auto;
 }
 
 #main {
