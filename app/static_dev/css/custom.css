@@ -4,7 +4,7 @@
  * Author: 
  */
 
-html, body { height:100%; }
+html, body { height:100%; background:#fafafa; }
 
 body, select, input, textarea {
   /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
@@ -50,6 +50,7 @@ a:hover {
 
 #main {
     padding: 10px;
+    text-align:center;
 }
 
 p { margin-bottom:10px; }

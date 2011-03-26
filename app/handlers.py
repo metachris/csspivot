@@ -181,6 +181,18 @@ def proxy(url, css, comment, id=None, showdialog=False):
     except:
         res = unicode(result.content)
 
+    # Update all links
+    res = res.replace('src="', 'src="%s/' % url.strip("/"))
+    res = res.replace("src='", "src='%s/" % url.strip("/"))
+    #res = res.replace("'/", "'%s/" % url.strip("/"))
+    res = res.replace('href="', 'href="%s/' % url.strip("/"))
+    res = res.replace("href='", "href='%s/" % url.strip("/"))
+    res = res.replace('url(', 'url(%s/' % url.strip("/"))
+
+    # Revert absolute links
+    res = res.replace("%s//" % url.strip("/"), "%s/" % url.strip("/"))
+    res = res.replace("%s/http" % url.strip("/"), "http")
+
     # Inject header html
     header = template.render(tdir + "inject_header.html", \
             {'id': id, 'url': url, 'css': css, 'comment': comment})
@@ -192,18 +204,17 @@ def proxy(url, css, comment, id=None, showdialog=False):
     inject = """<style>%s</style>""" % css
     res = res.replace("</head", "%s</head" % inject)
 
-    # Update links
-    res = res.replace('src="/', 'src="%s/' % url.strip("/"))
-    res = res.replace("src='/", "src='%s/" % url.strip("/"))
-    res = res.replace("'/", "'%s/" % url.strip("/"))
-    res = res.replace('href="/', 'href="%s/' % url.strip("/"))
-    res = res.replace('url(/', 'url(%s/' % url.strip("/"))
-
     # Inject footer html
     footer = template.render(tdir + "inject_footer.html", \
             {'id': id, 'url': url, 'css': css, 'comment': comment,
             'showdialog': showdialog})
-    res = res.replace("</body", "%s</body" % footer)
+    if "</body" in res:
+        res = res.replace("</body", "%s</body" % footer)
+    elif "</html" in res:
+        res = res.replace("</html", "%s</html" % footer)
+    else:
+        # eg. Google.com
+        res += footer
 
     return res
 

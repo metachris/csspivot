@@ -1,18 +1,49 @@
 {% extends "base.html" %}
 
-{% block main %}
+{% block scripts %}
 <script type="text/javascript">
-if (Modernizr.localstorage) {
-  // window.localStorage is available!
-} else {
-  // no native support for HTML5 storage :(
-  // maybe try dojox.storage or a third-party solution
+function isUrl(s) {
+ 	var regexp = /http:\/\/[A-Za-z0-9\.-]{3,}\.[A-Za-z]{3}/;
+ 	return regexp.test(s);
+}
+
+$(document).ready(function() {
+    document.getElementById("url").focus();
+    $("#url").keydown(function(event) { $("#info_invalidurl").hide(); });
+	$(".btn").button();
+});
+
+function valid() {
+    if (!isUrl($("#url").val())) {
+        $("#info_invalidurl").show();
+        return false;
+    }
 }
 </script>
-<br>
-<h2>New Pivot</h2>
-<form action="/preview" method="get">
-    <input type="text" id="url" name="url" value="{{ pivot.url }}" />
-    <input type="submit" />
+{% endblock %}
+
+{% block main %}
+<div style="margin:40px 0px 40px 0px;">
+    <img src="/images/logo.png" width="162" height="32" />
+</div>
+
+Modify and share CSS styles for any website.
+
+<form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
+<div style="padding-left:26px; margin-top:40px;">
+<div id="pivot" style="background:url(/images/inputshape.png) top left no-repeat; width:605px; height:99px;">
+    <input type="text" name="url" id="url" style="margin-top:20px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="http://" onfocus="this.value = this.value;" />
+</div>
+<div style="text-align:right; margin-top:3px;">
+
+<div style="float:left; padding-left:185px; width:140px; text-align:left; display:none;" id="info_invalidurl">
+    <div class="ui-state-error ui-corner-all" style="padding: 4px 0px 4px .7em;">    				 
+		<span class="ui-icon ui-icon-alert" style="float:left; padding-right:10px;"></span> Not a valid url
+	</div>
+    
+</div>
+    <input type="submit" value="open url" class="btn"/>
+</div>
+</div>
 </form>
 {% endblock %}
