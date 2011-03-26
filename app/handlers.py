@@ -69,8 +69,6 @@ class LogOut(webapp.RequestHandler):
 # Custom sites
 class Main(webapp.RequestHandler):
     def get(self):
-        logging.info(dir(self.request))
-        logging.info(dir(self.response))
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
         self.response.out.write(template.render(tdir + "index.html", \
@@ -93,11 +91,12 @@ class Main(webapp.RequestHandler):
             return
 
         project = Project(userprefs=prefs, id=gen_modelhash(Project), \
-                title=title, url=url)
+                title=title, url=url, rand=random.random())
         project.put()
 
         p = Pivot(userprefs=prefs, project=project, css=css, \
-                id=gen_modelhash(Pivot), comment=comment)
+                id=gen_modelhash(Pivot), comment=comment, \
+                rand=random.random())
         p.put()
 
         self.redirect("/%s" % p.id)
@@ -236,7 +235,8 @@ class PivotDetails(webapp.RequestHandler):
             return
 
         p = Pivot(userprefs=prefs, project=project, css=css, \
-                id=gen_modelhash(Pivot), comment=comment)
+                id=gen_modelhash(Pivot), comment=comment,
+                rand=random.random())
         p.put()
 
         self.redirect("/")

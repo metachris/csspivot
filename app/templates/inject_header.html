@@ -4,6 +4,7 @@
     border-bottom:1px solid gray;
     background:white; 
     font:13px/1.231 arial;
+    text-align:left;
 }
 #csspivot a {
     color:#16387C;
@@ -14,15 +15,17 @@
 }
 
 </style> 
+{% if id %}
 <script type="text/javascript">
     recent = localStorage.getItem("pivots_recentlyviewed");
-    recent = recent.replace("{{ id }},", "");
-    recent += "{{ id }},";
+    recent = recent.replace("{{ id }},", "") + "{{ id }},";
     localStorage.setItem("pivots_recentlyviewed", recent);
-    alert(recent);
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_comment", "{{ comment }}");
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_url", "{{ url }}");
 </script>
+{% endif %}
 <div id='csspivot' style="">
-    <a href=" /">CSS Pivot</a> 
+    <a href=" /"><b>CSS Pivot</b></a> 
     <small>
     {% if id %}
         &middot; <a href=" /{{ id }}">{{ id }}</a>

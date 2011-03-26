@@ -32,7 +32,7 @@ if (Modernizr.localstorage) {
 </form>
 
 </td><td style="padding-left:40px;">
-
+{% if prefs %}
 <h2>Your Pivots</h2>
 <ul>
 {% for project in prefs.project_set %}
@@ -46,6 +46,27 @@ if (Modernizr.localstorage) {
 
 </ul>
 
+{% else %}
+<div style="width:300px;">
+Please sign in to manage your pivots. You'll also have nice statistics, and free beer!
+</div>
+<br>
+<p>Recently viewed:</p>
+<div id="_recent"></div>
+<script type="text/javascript">
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    out = "";
+    arr = recent.split(",");
+    for (i in arr) {
+        if (arr[i] != "") {
+            comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
+            url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
+            out += "<li><a href='/" + arr[i] + "/details'>" + arr[i] + "</a> (" + url + " &middot; " + comment + ")</li>";
+        }
+    }
+    document.getElementById("_recent").innerHTML = "<ul>" + out + "</ul>";
+</script>
+{% endif %}   
 </td>
 </tr>
 </table>

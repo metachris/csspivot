@@ -70,6 +70,7 @@ class InternalUser(db.Model):
 
 class Project(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
+    rand = db.FloatProperty()
 
     id = db.StringProperty(required=True)
     title = db.StringProperty()
@@ -79,6 +80,7 @@ class Project(db.Model):
 
 class Pivot(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
+    rand = db.FloatProperty()
     project = db.ReferenceProperty(Project, required=True)
     parent_pivot = db.SelfReferenceProperty()
 
