@@ -66,3 +66,15 @@ class InternalUser(db.Model):
             prefs.put()
 
         return prefs
+
+
+class Pivot(db.Model):
+    userprefs = db.ReferenceProperty(InternalUser, required=True)
+    parent_comment = db.SelfReferenceProperty()
+    id = db.StringProperty(required=True)
+
+    url = db.StringProperty(required=True)
+    css = db.TextProperty()
+
+    date_submitted = db.DateTimeProperty(auto_now_add=True)
+    views = db.IntegerProperty(default=0)

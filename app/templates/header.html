@@ -1,2 +1,6 @@
-    <h1>AppEngine Boilerplate Demo</h1>
-    <br>
+<div id="header">
+    <div id="logo"><h1>CSS Pivot</h1></div>
+    <div id="side">
+        <p>{% if user %}welcome {{ user }}. <a href='/logout'>Log out</a>{% else %}<a href='/login'>Sign in</a>{% endif %}</p>
+    </div>
+</div>

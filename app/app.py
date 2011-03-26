@@ -14,11 +14,12 @@ from models import *
 from handlers import *
 
 urls = [
-    (r'/', Main),
     (r'/login', LogIn),
     (r'/_ah/login_required', LogIn),
     (r'/logout', LogOut),
     (r'/account', Account),
+    (r'/', Main),
+    (r'/([-\w]+)[/]?', PivotView),
 ]
 
 application = webapp.WSGIApplication(urls, debug=True)

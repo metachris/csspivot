@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 
 {% block main %}
-<div style="">
-    <ul>
-        <li>OpenID authentication</li>
-        <li>HTML5 boilerplate</li>
-        <li>Jinja2 templating engine</li>
-    </ul>
-    <br>
-    <p>{% if user %}welcome {{ user }}. <a href='/logout'>Log out</a>{% else %}<a href='/login'>Sign in</a>{% endif %}</p>
-    <br>
-    <a href="https://github.com/metachris/appengine-boilerplate">on github</a>
-    
-</div>
+<h2>Your Pivots</h2>
+{% for pivot in prefs.pivot_set %}
+    <p><a href="/{{ pivot.id }}">{{ pivot }}</a></p>
+{% endfor %}
+
+<h1>New Pivot</h1>
+<form action="/" method="post">
+    <p>URL: <input type="text" name="url" /></p>
+    <p>CSS: <textarea name="css" rows="14" cols="50"></textarea></p>
+    <input type="submit" />
+</form>
 {% endblock %}
