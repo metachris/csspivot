@@ -36,10 +36,12 @@ def randstr(n=6):
             for x in range(n))
 
 
-def free_pivotid(n=6):
+def gen_modelhash(m, n=6):
+    if not m:
+        return None
     while True:
         id = randstr(n)
-        if not Pivot.all().filter("id =", id).count():
+        if not m.all().filter("id =", id).count():
             return id
 
 
@@ -81,14 +83,23 @@ class Main(webapp.RequestHandler):
         prefs = InternalUser.from_user(user)
         logging.info("new pivot")
 
+        # project
+        title = decode(self.request.get('title'))
         url = decode(self.request.get('url'))
+        # first css pivot
         css = decode(self.request.get('css'))
+        comment = decode(self.request.get('comment'))
 
         if not url or not css:
-            logging.info("- no css or url")
+            logging.info("- no css, title or url")
             return
 
-        p = Pivot(userprefs=prefs, url=url, css=css, id=free_pivotid())
+        project = Project(userprefs=prefs, id=gen_modelhash(Project), \
+                title=title, url=url)
+        project.put()
+
+        p = Pivot(userprefs=prefs, project=project, css=css, \
+                id=gen_modelhash(Pivot), comment=comment)
         p.put()
 
         self.redirect("/")
@@ -97,8 +108,9 @@ class Main(webapp.RequestHandler):
 class Account(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
         self.response.out.write(template.render(tdir + "index.html", \
-                {"user": user}))
+                {"prefs": prefs}))
 
 
 class AssestHandler(webapp.RequestHandler):
@@ -150,6 +162,32 @@ class AssestHandler(webapp.RequestHandler):
             self.response.out.write(result.content)
 
 
+def proxy(url, css, comment, id=None):
+    if not url or not css:
+        return
+    # Read url and decode content
+    result = urlfetch.fetch(url, follow_redirects=True, deadline=10)
+    encoding = result.headers['content-type'].split('charset=')[-1]
+    res = unicode(result.content, encoding)
+
+    # Inject header html
+    header = template.render(tdir + "inject_header.html", \
+            {'id': id, 'url': url, 'css': css, 'comment': comment})
+    pos = re.search("<body[^>]*>(.*?)", res)
+    if pos:
+        res = """%s%s%s""" % (res[:pos.end()], header, res[pos.end():])
+
+    # Inject css
+    inject = """<style>%s</style>""" % css
+    res = res.replace("</head", "%s</head" % inject)
+
+    # Update links
+    res = res.replace('src="/', 'src="%s/' % url.strip("/"))
+    res = res.replace('href="/', 'href="%s/' % url.strip("/"))
+
+    return res
+
+
 class PivotView(webapp.RequestHandler):
     def get(self, id):
         logging.info("load pivot %s" % id)
@@ -158,20 +196,58 @@ class PivotView(webapp.RequestHandler):
             self.error(404)
             return
 
-        # Read url and decode content
-        result = urlfetch.fetch(pivot.url, follow_redirects=True, deadline=10)
-        encoding = result.headers['content-type'].split('charset=')[-1]
-        res = unicode(result.content, encoding)
+        res = proxy(pivot.project.url, pivot.css, pivot.comment, id=id)
+        self.response.out.write(res)
 
-        # Inject out header html
-        pos = re.search("<body[^>]*>(.*?)", res)
-        if pos:
-            logging.info("pos1: %s" % pos)
-            res = """%s<div id='csspivot'>css pivot</div><div style="clear:both;"></div>%s""" % \
-                    (res[:pos.end()], res[pos.end():])
 
-        # Inject css
-        inject = """<style>%s</style>""" % pivot.css
-        res = res.replace("</head", "%s</head" % inject)
+class PivotDetails(webapp.RequestHandler):
+    def get(self, id):
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
 
+        pivot = Pivot.all().filter("id =", id).get()
+
+        self.response.out.write(template.render(tdir + "details.html", \
+                {"prefs": prefs, 'pivot': pivot}))
+
+    def post(self, id):
+        user = users.get_current_user()
+        if not user:
+            self.error(403)
+            return
+
+        prefs = InternalUser.from_user(user)
+        logging.info("update pivot")
+
+        # project
+        project_key = decode(self.request.get('project_key'))
+        project = Project.get(db.Key(project_key))
+        if not project:
+            self.error(403)
+            return
+
+        # new css pivot
+        css = decode(self.request.get('css'))
+        comment = decode(self.request.get('comment'))
+        if not css or not comment:
+            logging.info("- no css or comment")
+            return
+
+        p = Pivot(userprefs=prefs, project=project, css=css, \
+                id=gen_modelhash(Pivot), comment=comment)
+        p.put()
+
+        self.redirect("/")
+
+
+class Preview(webapp.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        url = decode(self.request.get('url'))
+        css = urllib.unquote(decode(self.request.get('css')))
+        comment = decode(self.request.get('comment'))
+
+        res = proxy(url, css, comment)
         self.response.out.write(res)

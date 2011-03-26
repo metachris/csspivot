@@ -1,0 +1,27 @@
+<style type="text/css">
+#csspivot {
+    padding:2px 4px;
+    border-bottom:1px solid gray;
+    background:white; 
+    font:13px/1.231 arial;
+}
+#csspivot a {
+    color:#16387C;
+    text-decoration:none;
+}
+#csspivot a:hover {
+    text-decoration:underline;
+}
+
+</style> 
+<div id='csspivot' style="">
+    <a href=" /">CSS Pivot</a> 
+    <small>
+    {% if id %}
+        &middot; <a href=" /{{ id }}">{{ id }}</a>
+        &middot; <a href=" /{{ id }}/details">view stylesheet</a>
+    {% else %}
+        &middot; preview
+    {% endif %}
+    </small> 
+</div>

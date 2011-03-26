@@ -1,15 +1,44 @@
 {% extends "base.html" %}
 
 {% block main %}
+<script type="text/javascript">
+function preview() {
+    
+}
+</script>
+
+<p>
 <h2>Your Pivots</h2>
-{% for pivot in prefs.pivot_set %}
-    <p><a href="/{{ pivot.id }}">{{ pivot }}</a></p>
+<ul>
+{% for project in prefs.project_set %}
+    <li>{{ project.url }}
+    <ul>
+    {% for pivot in project.pivot_set %}
+        <li><a href="/{{ pivot.id }}">{{ pivot.id }} &middot; {{ pivot.comment }}</a></li>
+    {% endfor %}
+    </ul></li>
 {% endfor %}
 
-<h1>New Pivot</h1>
+</ul>
+</p>
+<br>
+<p>
+<h2>New Pivot</h2>
 <form action="/" method="post">
-    <p>URL: <input type="text" name="url" /></p>
-    <p>CSS: <textarea name="css" rows="14" cols="50"></textarea></p>
-    <input type="submit" />
+<table id='table_details'>
+    <tr>
+        <td class='info'>URL:</td><td><input type="text" id="url" name="url" value="{{ pivot.url }}" /></td>
+    </tr><tr>
+<!--        <td class='info'>Title:</td><td><input type="text" name="title" value="{{ pivot.title }}" /></td>
+    </tr><tr>
+-->
+        <td class='info'>CSS:</td><td><textarea name="css" id="css" rows="14" cols="50">{{ pivot.css }}</textarea></td>
+    </tr><tr>
+        <td class='info'>Comment:</td><td><input type="comment" id="comment" name="comment" value="{{ pivot.title }}" /></td>
+    </tr><tr>
+        <td></td><td><input type="button" onclick="preview()" value="Preview" /> <input type="submit" value="Save new pivot" /></td>
+    </tr>
+</table>
 </form>
+</p>
 {% endblock %}

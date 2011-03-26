@@ -6,13 +6,49 @@
 
 body, select, input, textarea {
   /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
-  color: #333;
-  /*font-family: Georgia, serif;*/
+  color: #444;
   font-family: 'Helvetica Neue', Helvetica, Arial, default;
 }
 
 /* Headers (h1, h2, etc) have no default font-size or margin; define those yourself */
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+h2 { font-size:16px; margin-bottom:14px; }
 
-a, a:active, a:visited { color: #607890; }
-a:hover { color: #036; }
+a, a:active, a:visited { 
+    color: #607890; 
+    text-decoration:none;
+}
+a:hover { 
+    color: #036; 
+    text-decoration:underline;
+}
+
+#header {
+    border-bottom:1px solid lightgray;
+    padding:4px 10px;
+} 
+
+#header #logo {
+    float:left;
+}
+
+#header h1 {
+    font-size:20px;
+} 
+
+#header #side {
+    text-align:right;
+}
+
+#main {
+    padding: 10px;
+}
+
+p { margin-bottom:10px; }
+
+#table_details td {
+    padding:2px 4px;
+}
+#table_details td.info {
+    padding-top:6px;
+}

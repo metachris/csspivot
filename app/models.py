@@ -68,13 +68,22 @@ class InternalUser(db.Model):
         return prefs
 
 
-class Pivot(db.Model):
-    userprefs = db.ReferenceProperty(InternalUser, required=True)
-    parent_comment = db.SelfReferenceProperty()
+class Project(db.Model):
+    userprefs = db.ReferenceProperty(InternalUser)
+
     id = db.StringProperty(required=True)
-
+    title = db.StringProperty()
     url = db.StringProperty(required=True)
-    css = db.TextProperty()
+    date_submitted = db.DateTimeProperty(auto_now_add=True)
 
+
+class Pivot(db.Model):
+    userprefs = db.ReferenceProperty(InternalUser)
+    project = db.ReferenceProperty(Project, required=True)
+    parent_pivot = db.SelfReferenceProperty()
+
+    id = db.StringProperty(required=True)
+    comment = db.StringProperty()
+    css = db.TextProperty(required=True)
     date_submitted = db.DateTimeProperty(auto_now_add=True)
     views = db.IntegerProperty(default=0)
