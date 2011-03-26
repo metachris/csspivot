@@ -80,11 +80,11 @@ class Main(webapp.RequestHandler):
         logging.info("new pivot")
 
         # project
-        title = decode(self.request.get('title'))
-        url = decode(self.request.get('url'))
+        title = decode(self.request.get('csspivot_title'))
+        url = decode(self.request.get('csspivot_url'))
         # first css pivot
-        css = decode(self.request.get('css'))
-        comment = decode(self.request.get('comment'))
+        css = decode(self.request.get('csspivot_css'))
+        comment = decode(self.request.get('csspivot_comment'))
 
         if not url or not css:
             logging.info("- no css, title or url")
