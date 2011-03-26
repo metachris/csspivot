@@ -31,12 +31,12 @@ def decode(var):
     return unicode(var, 'utf-8') if isinstance(var, str) else unicode(var)
 
 
-def randstr(n=6):
+def randstr(n=5):
     return ''.join(random.choice(string.ascii_letters + string.digits * 2) \
             for x in range(n))
 
 
-def gen_modelhash(m, n=6):
+def gen_modelhash(m, n=5):
     if not m:
         return None
     while True:

@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/css/libs/jquery-ui-aristo.css" />  
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+<script>window.jQuery || document.write("<script src='js/libs/jquery-1.5.1.min.js'>\x3C/script>")</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+<script src="/js/script.js"></script>
+
+<div id="csspivot_cssdialog" title="Custom Styles">
+<form action="/" method="post" id="csspivot_form">
+<input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
+<input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
+<textarea rows=10 style="width:98%; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
+</form>
+</div>
+
+<script type="text/javascript">
+{% if id %}
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    if (!recent) recent = "";
+    recent = recent.replace("{{ id }},", "") + "{{ id }},";
+    localStorage.setItem("pivots_recentlyviewed", recent);
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_comment", "{{ comment }}");
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_url", "{{ url }}");
+{% endif %}
+
+$(document).ready(function() {
+	$(".csspivot_btn").button();
+    $("#csspivot_cssdialog").dialog({ autoOpen: false, width: 400, buttons: [
+        { text: "Preview", click: function() { preview(); }},
+        { text: "Save", click: function() { $("#csspivot_form").submit(); }}
+    ], resize: function(event, ui) { 
+        h = document.getElementById("csspivot_cssdialog").style.height;
+        h = parseInt(h.replace("px", ""));
+        $("#csspivot_css").height(h-14);
+    }
+    });
+});    
+
+function showcss() {
+    $("#csspivot_cssdialog").dialog("open");
+}
+</script>
