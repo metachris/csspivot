@@ -1,14 +1,14 @@
 <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 <style type="text/css">
     #csspivot {
-        padding:2px 4px;
+        padding:4px 10px 0px 10px;
         border-bottom:1px solid gray;
-        background:white; 
+        background:#fafafa; 
         font:13px/1.231 arial;
         text-align:left;
     }
     #csspivot a {
-        color:#16387C;
+        color:#444;
         text-decoration:none;
     }
     #csspivot a b {
@@ -17,15 +17,26 @@
     #csspivot a:hover {
         text-decoration:underline;
     }
+    #csspivot img {
+        padding-left:5px;
+    }
 </style>
 
 <div id='csspivot' style="">
-    <a href=" /"><b>CSS Pivot</b></a> 
-    <small>
-    {% if id %}
-        &middot; <a href=" /{{ id }}">{{ id }}</a>
-    {% endif %}
-        &middot; <a href="javascript:showcss()">view custom style</a>
-    </small> 
+    <div style="float:right;">
+        <div style="float:left;"><small><a href="javascript:feedback()" style="margin-top:-3px;">feedback</a></small> &middot;</div>
+        <a href="http://twitter.com/csspivot" target="_blank"><img src="/images/twitter.png" width="16px" height="16px" /></a>
+        <!--<img src="/images/fb.png" width="16px" height="16px" />-->
+    </div>
+    <div style="">
+        <a href=" /"><b>CSS Pivot</b></a> 
+        <small>
+        {% if id %}
+            &middot; <a href=" /{{ id }}">{{ id }}</a>
+        {% endif %}
+            &middot; <a href="javascript:showcss()">view custom css</a>
+        </small> 
+    </div>
+<div style="clear:both;"></div>
 </div>
 
