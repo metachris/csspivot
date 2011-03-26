@@ -159,7 +159,7 @@ class AssestHandler(webapp.RequestHandler):
             self.response.out.write(result.content)
 
 
-def proxy(url, css, comment, id=None):
+def proxy(url, css, comment, id=None, showdialog=False):
     if not url:
         return "Not a valid url (%s)" % url
 
@@ -201,7 +201,8 @@ def proxy(url, css, comment, id=None):
 
     # Inject footer html
     footer = template.render(tdir + "inject_footer.html", \
-            {'id': id, 'url': url, 'css': css, 'comment': comment})
+            {'id': id, 'url': url, 'css': css, 'comment': comment,
+            'showdialog': showdialog})
     res = res.replace("</body", "%s</body" % footer)
 
     return res
@@ -267,9 +268,10 @@ class Preview(webapp.RequestHandler):
         url = decode(self.request.get('url'))
         css = urllib.unquote(decode(self.request.get('css')))
         comment = decode(self.request.get('comment'))
+        showdialog = False if decode(self.request.get('s')) else True
 
         #self.response.out.write(template.render(tdir + "pivot_preview.html", \
         #        {"prefs": prefs, 'url': url, 'css': css}))
         #return
-        res = proxy(url, css, comment)
+        res = proxy(url, css, comment, showdialog=showdialog)
         self.response.out.write(res)
