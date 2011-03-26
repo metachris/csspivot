@@ -2,7 +2,8 @@
 
 {% block main %}
 
-<h2><a href="/{{ pivot.id }}" target="_blank">http://csspivot.com/{{ pivot.id }}</a></h2>
+<p>
+<h2><a href="/{{ pivot.id }}">http://csspivot.com/{{ pivot.id }}</a></h2>
 <form action="/{{ pivot.id }}/details" method="post">
 <input type="hidden" name="pivot_key" value="{{ pivot.key }}" />
 <input type="hidden" name="project_key" value="{{ pivot.project.key }}" />
@@ -22,5 +23,6 @@
     </tr>
 </table>
 </form>
+</p>
 
 {% endblock %}

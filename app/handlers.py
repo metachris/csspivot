@@ -69,6 +69,8 @@ class LogOut(webapp.RequestHandler):
 # Custom sites
 class Main(webapp.RequestHandler):
     def get(self):
+        logging.info(dir(self.request))
+        logging.info(dir(self.response))
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
         self.response.out.write(template.render(tdir + "index.html", \
@@ -76,10 +78,6 @@ class Main(webapp.RequestHandler):
 
     def post(self):
         user = users.get_current_user()
-        if not user:
-            self.error(403)
-            return
-
         prefs = InternalUser.from_user(user)
         logging.info("new pivot")
 
@@ -102,7 +100,7 @@ class Main(webapp.RequestHandler):
                 id=gen_modelhash(Pivot), comment=comment)
         p.put()
 
-        self.redirect("/")
+        self.redirect("/%s" % p.id)
 
 
 class Account(webapp.RequestHandler):
@@ -165,8 +163,16 @@ class AssestHandler(webapp.RequestHandler):
 def proxy(url, css, comment, id=None):
     if not url or not css:
         return
+    if not "http://" in url and not "https://" in url:
+        url = "http://%s" % url
+
     # Read url and decode content
-    result = urlfetch.fetch(url, follow_redirects=True, deadline=10)
+    try:
+        result = urlfetch.fetch(url, follow_redirects=True, deadline=10)
+    except:
+        logging.warning("urlfetch error [%s]" % url)
+        return "URL Invalid (%s)" % url
+
     encoding = result.headers['content-type'].split('charset=')[-1]
     res = unicode(result.content, encoding)
 
@@ -212,10 +218,6 @@ class PivotDetails(webapp.RequestHandler):
 
     def post(self, id):
         user = users.get_current_user()
-        if not user:
-            self.error(403)
-            return
-
         prefs = InternalUser.from_user(user)
         logging.info("update pivot")
 

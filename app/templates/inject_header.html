@@ -14,6 +14,13 @@
 }
 
 </style> 
+<script type="text/javascript">
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    recent = recent.replace("{{ id }},", "");
+    recent += "{{ id }},";
+    localStorage.setItem("pivots_recentlyviewed", recent);
+    alert(recent);
+</script>
 <div id='csspivot' style="">
     <a href=" /">CSS Pivot</a> 
     <small>
