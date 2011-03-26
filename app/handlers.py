@@ -71,8 +71,9 @@ class Main(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
+        invalid_url = decode(self.request.get('u'))
         self.response.out.write(template.render(tdir + "index.html", \
-                {"prefs": prefs}))
+                {"prefs": prefs, 'invalid_url': invalid_url}))
 
     def post(self):
         user = users.get_current_user()
@@ -167,15 +168,16 @@ def proxy(url, css, comment, id=None, showdialog=False):
     if not url:
         return "Not a valid url (%s)" % url
 
-    if not "http://" in url and not "https://" in url:
+    if not "://" in url:
         url = "http://%s" % url
+    logging.info("proxy: %s" % url)
 
     # Read url and decode content
     try:
         result = urlfetch.fetch(url, follow_redirects=True, deadline=10)
     except:
         logging.warning("urlfetch error [%s]" % url)
-        return "URL Invalid (%s)" % url
+        return None
 
     logging.info(result.headers)
     try:
@@ -200,28 +202,35 @@ def proxy(url, css, comment, id=None, showdialog=False):
     # Inject header html
     header = template.render(tdir + "inject_header.html", \
             {'id': id, 'url': url, 'css': css, 'comment': comment})
-    pos = re.search("<body[^>]*>(.*?)", res)
+    pos = re.search("<body[^>]*>(.*?)", res, re.IGNORECASE)
     if pos:
         res = """%s%s%s""" % (res[:pos.end()], header, res[pos.end():])
 
     # Inject css
     inject = """<style>%s</style>""" % css
-    res = res.replace("</head", "%s</head" % inject)
+    pos = re.search("</head", res, re.IGNORECASE)
+    if not pos:
+        # no /head tag
+        pos = re.search("<body", res, re.IGNORECASE)
+    if pos:
+        res = """%s%s%s""" % (res[:pos.start()], inject, res[pos.start():])
 
     # Inject footer html
     footer = template.render(tdir + "inject_footer.html", \
             {'id': id, 'url': url, 'css': css, 'comment': comment,
             'showdialog': showdialog})
-    if "</body" in res:
-        res = res.replace("</body", "%s</body" % footer)
-    elif "</html" in res:
-        res = res.replace("</html", "%s</html" % footer)
+    pos = re.search("</body", res, re.IGNORECASE)
+    if not pos:
+        pos = re.search("</html", res, re.IGNORECASE)
+    if pos:
+        res = """%s%s%s""" % (res[:pos.start()], footer, res[pos.start():])
     else:
         # eg. Google.com
         res += footer
 
-    if "<title>" in res:
-        res = res.replace('<title>', "<title>CSS Pivot: ")
+    pos = re.search("<title>", res, re.IGNORECASE)
+    if pos:
+        res = """%s%s%s""" % (res[:pos.end()], "CSS Pivot: ", res[pos.end():])
 
     return res
 
@@ -292,4 +301,7 @@ class Preview(webapp.RequestHandler):
         #        {"prefs": prefs, 'url': url, 'css': css}))
         #return
         res = proxy(url, css, comment, showdialog=showdialog)
-        self.response.out.write(res)
+        if res:
+            self.response.out.write(res)
+        else:
+            self.redirect("/?u=%s" % url)

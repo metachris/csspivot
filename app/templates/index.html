@@ -3,7 +3,7 @@
 {% block scripts %}
 <script type="text/javascript">
 function isUrl(s) {
- 	var regexp = /http:\/\/[A-Za-z0-9\.-]{3,}\.[A-Za-z]{3}/;
+ 	var regexp = /http:\/\/[A-Za-z0-9\.-]{3,}\.[A-Za-z]{2,4}/;
  	return regexp.test(s);
 }
 
@@ -14,7 +14,10 @@ $(document).ready(function() {
 });
 
 function valid() {
-    if (!isUrl($("#url").val())) {
+    url = $("#url").val();
+    if (url.indexOf("://") == -1)
+        url = "http://" + url;
+    if (!isUrl(url)) {
         $("#info_invalidurl").show();
         return false;
     }
@@ -32,11 +35,11 @@ Modify and share CSS styles for any website.
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
 <div style="padding-left:26px; margin-top:40px;">
 <div id="pivot" style="background:url(/images/inputshape2.png) top left no-repeat; width:605px; height:80px;">
-    <input type="text" name="url" id="url" style="margin-top:10px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="http://" onfocus="this.value = this.value;" />
+    <input type="text" name="url" id="url" style="margin-top:10px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="{% if invalid_url %}{{ invalid_url }}{% else %}http://{% endif %}" onfocus="this.value = this.value;" />
 </div>
 <div style="text-align:right; margin-top:3px;">
 
-<div style="float:left; padding-left:185px; width:140px; text-align:left; display:none;" id="info_invalidurl">
+<div style="float:left; padding-left:185px; width:140px; text-align:left; {% if not invalid_url %}display:none;{% endif %}" id="info_invalidurl">
     <div class="ui-state-error ui-corner-all" style="padding: 4px 0px 4px .7em;">    				 
 		<span class="ui-icon ui-icon-alert" style="float:left; padding-right:10px;"></span> Not a valid url
 	</div>
@@ -78,4 +81,9 @@ Modify and share CSS styles for any website.
     <div style="clear:both;"></div>
 </div>
 
+<!--
+<div style="margin-top:50px; text-align:center;">
+<a href="javascript:feedback()"><img src="/images/twitter_us.png" /></a>
+</div>
+-->
 {% endblock %}
