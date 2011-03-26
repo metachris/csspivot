@@ -86,6 +86,6 @@ class Pivot(db.Model):
 
     id = db.StringProperty(required=True)
     comment = db.StringProperty()
-    css = db.TextProperty(required=True)
+    css = db.TextProperty()
     date_submitted = db.DateTimeProperty(auto_now_add=True)
     views = db.IntegerProperty(default=0)

@@ -86,9 +86,13 @@ class Main(webapp.RequestHandler):
         css = decode(self.request.get('csspivot_css'))
         comment = decode(self.request.get('csspivot_comment'))
 
-        if not url or not css:
-            logging.info("- no css, title or url")
+        if not url:
+            logging.info("- no css or url")
+            self.response.out.write("no css or url")
             return
+
+        if not css:
+            css = ""
 
         project = Project(userprefs=prefs, id=gen_modelhash(Project), \
                 title=title, url=url, rand=random.random())
@@ -215,6 +219,9 @@ def proxy(url, css, comment, id=None, showdialog=False):
     else:
         # eg. Google.com
         res += footer
+
+    if "title>" in res:
+        res = res.replace('title>', "title>CSS Pivot: ")
 
     return res
 

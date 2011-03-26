@@ -5,11 +5,11 @@
 <script src="/js/script.js"></script>
 
 <div id="csspivot_cssdialog" title="Custom Styles">
-<form action="/" method="post" id="csspivot_form">
-<input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
-<input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
-<textarea rows=10 style="width:98%; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
-</form>
+    <form action="/" method="post" id="csspivot_form">
+        <input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
+        <input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
+        <textarea rows=10 style="width:98%; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
+    </form>
 </div>
 
 <script type="text/javascript">
@@ -26,7 +26,7 @@ $(document).ready(function() {
 	$(".csspivot_btn").button();
     $("#csspivot_cssdialog").dialog({ autoOpen: {% if showdialog %}true{% else %}false{% endif %}, width: 400, buttons: [
         { text: "Preview", click: function() { preview(false); }},
-        { text: "Save", click: function() { previewWindow.close(); $("#csspivot_form").submit(); }}
+        { text: "Save", click: function() { if (previewWindow) previewWindow.close(); $("#csspivot_form").submit(); }}
     ], resize: function(event, ui) { 
         h = document.getElementById("csspivot_cssdialog").style.height;
         h = parseInt(h.replace("px", ""));
