@@ -220,8 +220,8 @@ def proxy(url, css, comment, id=None, showdialog=False):
         # eg. Google.com
         res += footer
 
-    if "title>" in res:
-        res = res.replace('title>', "title>CSS Pivot: ")
+    if "<title>" in res:
+        res = res.replace('<title>', "<title>CSS Pivot: ")
 
     return res
 
