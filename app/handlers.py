@@ -71,10 +71,12 @@ def get_recent_pivots(clear=False):
     if clear:
         memcache.delete("pivots_recent")
         return
+
     pivots = memcache.get("pivots_recent")
     if pivots:
         #logging.info("return cached pivots")
         return pivots
+
     pivots = []
     for pivot in Pivot.all().order("-date_submitted").fetch(20):
         pivots.append(pivot)
@@ -86,6 +88,7 @@ def get_heavy_pivots(clear=False):
     if clear:
         memcache.delete("pivots_heavy")
         return
+
     pivots = memcache.get("pivots_heavy")
     if pivots:
         #logging.info("return cached pivots")
@@ -96,7 +99,7 @@ def get_heavy_pivots(clear=False):
         pivots.append((pivot.css.count(":"), pivot))
     pivots.sort(reverse=True)
 
-    memcache.set("pivots_recent", pivots)
+    memcache.set("pivots_heavy", pivots[:20])
     return pivots
 
 
