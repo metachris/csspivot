@@ -22,8 +22,13 @@ $(document).ready(function() {
     $("#csspivot_cssdialog").dialog({ autoOpen: {% if showdialog %}true{% else %}false{% endif %}, 
         width: 500, height:350, resizable:false, buttons: [
         { text: "Preview", click: function() { preview(true); }},
-        { text: "Save", click: function() {     
-                if ($("#csspivot_css").val().length == 0) { alert("Please enter a style before saving"); return ; }
+        { text: "Save", click: function() {
+                css = $("#csspivot_css").val();     
+                if (css.length == 0) { alert("Please enter a style before saving"); return ; }
+                if (css.indexOf("{") == -1 || css.indexOf("}") == -1) {
+                    alert("This doesn't look like valid css. Here is an example css: \n\n body { background:red; }");
+                    return ;
+                }
                 if (previewWindow) previewWindow.close(); 
                 $("#csspivot_form").submit(); 
             }
