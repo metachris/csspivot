@@ -14,10 +14,10 @@ $(document).ready(function() {
 
 <div style="margin:40px 20px 0px 108px; text-align:center;">
 <table width=""><tr>
-<td width="300px" style="text-align:left;"><p>Your pivots</p>
+<td width="260px" style="text-align:left;"><p>Your pivots</p>
 <ul style="text-align:left;">
     {% for pivot in prefs.pivot_set %}
-    <li><a href="/{{ pivot.id }}">{{ pivot.id }}</a> <small>({{ pivot.project.url|truncate_chars:26 }})</small></li>
+    <li><a href="/{{ pivot.id }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} style{{ pivot.css|styles_count|pluralize }}</small></li>
     {% endfor %}
 </ul>
 </td>
@@ -25,16 +25,17 @@ $(document).ready(function() {
 <td style="text-align:left;"><p>Recently viewed</p>
 <div id="_recent"></div>
 <script type="text/javascript">
-    recent = localStorage.getItem("pivots_recentlyviewed");
+    k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
+    recent = localStorage.getItem("pivots_recentlyviewed" + k);
     out = "";
     if (recent) {
     arr = recent.split(",");
         for (i in arr) {            
             if (arr[i] != "") {
-                comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
-                url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
+                cnt = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_cnt");
+                url = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_url");
                 url = url.length > 26 ? url.substr(0, 26) + "..." : url;
-                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" +  url + ")</small></li>";
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> &middot; <small>" + url + " &middot; " + cnt + " styles</small></li>";
             }
             if (i > 20) break;
         }

@@ -41,12 +41,14 @@ $(document).ready(function() {
 });
 
 {% if id %}
-    recent = localStorage.getItem("pivots_recentlyviewed");
+    k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
+    recent = localStorage.getItem("pivots_recentlyviewed" + k);
     if (!recent) recent = "";
+    
     recent = "{{ id }}," + recent.replace("{{ id }},", "");
-    localStorage.setItem("pivots_recentlyviewed", recent);
-    localStorage.setItem("pivots_recentlyviewed_{{ id }}_comment", "{{ comment }}");
-    localStorage.setItem("pivots_recentlyviewed_{{ id }}_url", "{{ url }}");
+    localStorage.setItem("pivots_recentlyviewed" + k, recent);
+    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ id }}_cnt", "{{ css|styles_count }}");
+    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ id }}_url", "{{ url }}");
 {% endif %}
 
 function showcss() {

@@ -60,7 +60,7 @@ function get_recent_pivots() {
     if (pivots_recent) 
         return pivots_recent;
 
-    recent = localStorage.getItem("pivots_recentlyviewed");
+    recent = localStorage.getItem("pivots_recentlyviewed" + k);
     if (recent) {
         arr = recent.split(",");
         pivots_recent = arr;
@@ -76,9 +76,11 @@ function showpivots(i) {
         for (i in arr) {
             if (arr[i] != "") {
                 //console.log(arr[i]);
-                comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
-                url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
-                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" + url + ")</small></li>";
+                cnt = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_cnt");
+                cnt_txt = "";
+                if (cnt) { if (cnt > 0) cnt_txt = " &middot; " + cnt + " style"; if (cnt > 1) cnt_txt += "s"; }
+                url = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_url");
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> &middot; <small>" + url + cnt_txt + "</small></li>";
             }
             if (i > 20) break;
         }

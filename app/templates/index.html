@@ -29,6 +29,9 @@ function valid() {
 function discover() {
     $("#dialog_discover").dialog("open");
 }
+
+var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
+
 </script>
 {% endblock %}
 
