@@ -4,6 +4,7 @@ import os
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
+from google.appengine.api import mail
 
 from google.appengine.ext import db
 from google.appengine.ext import webapp
@@ -336,6 +337,7 @@ class ProxyView(webapp.RequestHandler):
             #logging.info(encoding)
             res = unicode(result.content, encoding)
         except:
+            logging.warning("no encoding found. decode replace [%s]" % url)
             res = unicode(result.content, errors='replace')
 
         # Update all links
@@ -365,3 +367,25 @@ class ProxyView(webapp.RequestHandler):
             res = """%s%s%s""" % (res[:pos.start()], inject, res[pos.start():])
 
         self.response.out.write(res)
+
+
+class AboutView(webapp.RequestHandler):
+    def post(self):
+        # feedback form submit
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        msg = decode(self.request.get('msg'))
+        #logging.info("msg: %s" % msg)
+        if msg:
+            if prefs:
+                sender = "%s (%s)" % (prefs.nickname, prefs.email)
+            else:
+                sender = decode(self.request.get('email'))
+            logging.info("feedback '%s' from %s" % (msg, sender))
+            message = mail.EmailMessage()
+            message.sender = "CSS Pivot <hello@csspivot.com>"
+            message.to = "hello@csspivot.com"
+            message.subject = "CSS Pivot Feedback"
+            message.body = "Feedback from '%s':\n\n%s" % (sender, msg)
+            message.send()

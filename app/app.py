@@ -21,6 +21,7 @@ urls = [
     (r'/preview', Preview),
     (r'/proxy', ProxyView),
     (r'/tour', TourView),
+    (r'/about', AboutView),
     (r'/proxy/([-\w]+)[/]?', ProxyView),
     (r'/', Main),
     (r'/([-\w]+)[/]?', PivotView),

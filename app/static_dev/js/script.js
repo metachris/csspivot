@@ -112,6 +112,34 @@ function showpivots(i) {
 
 
 
+function feedback() {
+    $("#feedback-dialog-content").show();
+    $("#feedback-dialog-content-wait").hide();
+    $("#feedback-dialog-content-postsubmit").hide();
+	$("#dialog_feedback").dialog("open");
+}
+
+function feedback_submit() {
+    $("#feedback-dialog-content").hide();
+    $("#feedback-dialog-content-wait").show();
+    $("#feedback-dialog-content-postsubmit").hide();        
+
+    msg = { 
+        "msg": $("#feedback_text").val(),
+        "email": $("#feedback_email").val()
+    }
+    $.ajax({
+        type: 'POST',
+        url: "/about",
+        data: msg,
+        success: function(){
+            $("#feedback-dialog-content-wait").hide();
+            $("#feedback-dialog-content-postsubmit").show();        
+        }
+    });
+    
+    return false;
+}
 
 
 
