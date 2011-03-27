@@ -97,6 +97,11 @@ function showpivots(i) {
         $("#discover_pivotlist").html($("#_examples").html());
         $("#dialog_pivots").dialog("open");
         $("#dialog_pivots").dialog("option", "title", 'Selected Pivots'); 
+
+    } else if (i == 2) {
+        $("#discover_pivotlist").html($("#_heavy").html());
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'Heavy Pivots'); 
     }
 }
 

@@ -93,3 +93,6 @@ class Pivot(db.Model):
     css = db.TextProperty()
     date_submitted = db.DateTimeProperty(auto_now_add=True)
     views = db.IntegerProperty(default=0)
+
+    # number of : characters (single styles)
+    styles_count = db.IntegerProperty(default=0)

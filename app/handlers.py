@@ -82,6 +82,24 @@ def get_recent_pivots(clear=False):
     return pivots
 
 
+def get_heavy_pivots(clear=False):
+    if clear:
+        memcache.delete("pivots_heavy")
+        return
+    pivots = memcache.get("pivots_heavy")
+    if pivots:
+        #logging.info("return cached pivots")
+        return pivots
+    pivots = []
+
+    for pivot in Pivot.all():
+        pivots.append((pivot.css.count(":"), pivot))
+    pivots.sort(reverse=True)
+
+    memcache.set("pivots_recent", pivots)
+    return pivots
+
+
 # Custom sites
 class Main(webapp.RequestHandler):
     def head(self, screen_name=None):
@@ -91,12 +109,14 @@ class Main(webapp.RequestHandler):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
         invalid_url = decode(self.request.get('u'))
+
         recent = get_recent_pivots()[:10]
+        heavy = get_heavy_pivots()[:10]
 
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
-                'recent': recent}))
+                'recent': recent, 'heavy': heavy}))
 
     def post(self):
         user = users.get_current_user()
@@ -130,7 +150,6 @@ class Main(webapp.RequestHandler):
                 self.error(403)
                 return
             p.css = css
-            p.put()
         else:
             project = Project(userprefs=prefs, id=gen_modelhash(Project), \
                     title=title, url=url, rand=random.random())
@@ -139,10 +158,13 @@ class Main(webapp.RequestHandler):
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
                     rand=random.random())
-            p.put()
+
+        p.styles_count = p.css.count(":")
+        p.put()
 
         # Clear Cache
         get_recent_pivots(clear=True)
+        get_heavy_pivots(clear=True)
 
         self.redirect("/%s" % p.id)
 
