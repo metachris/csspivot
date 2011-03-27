@@ -73,7 +73,7 @@ def get_recent_pivots(clear=False):
         return
     pivots = memcache.get("pivots_recent")
     if pivots:
-        logging.info("return cached pivots")
+        #logging.info("return cached pivots")
         return pivots
     pivots = []
     for pivot in Pivot.all().order("-date_submitted").fetch(20):
@@ -101,7 +101,7 @@ class Main(webapp.RequestHandler):
     def post(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
-        logging.info("new pivot")
+        #logging.info("new pivot")
 
         # project
         title = decode(self.request.get('csspivot_title'))
@@ -109,6 +109,8 @@ class Main(webapp.RequestHandler):
         # first css pivot
         css = decode(self.request.get('csspivot_css'))
         comment = decode(self.request.get('csspivot_comment'))
+        new = decode(self.request.get('csspivot_new'))
+        #logging.info("new: %s" % new)
 
         if not url:
             logging.info("- no css or url")
@@ -118,14 +120,26 @@ class Main(webapp.RequestHandler):
         if not css:
             css = ""
 
-        project = Project(userprefs=prefs, id=gen_modelhash(Project), \
-                title=title, url=url, rand=random.random())
-        project.put()
+        if new and len(new) > 4:
+            # Update an existing pivot
+            p = Pivot.all().filter("id =", new).get()
+            if not p:
+                self.error(404)
+                return
+            if p.userprefs.key() != prefs.key():
+                self.error(403)
+                return
+            p.css = css
+            p.put()
+        else:
+            project = Project(userprefs=prefs, id=gen_modelhash(Project), \
+                    title=title, url=url, rand=random.random())
+            project.put()
 
-        p = Pivot(userprefs=prefs, project=project, css=css, \
-                id=gen_modelhash(Pivot), comment=comment, \
-                rand=random.random())
-        p.put()
+            p = Pivot(userprefs=prefs, project=project, css=css, \
+                    id=gen_modelhash(Pivot), comment=comment, \
+                    rand=random.random())
+            p.put()
 
         # Clear Cache
         get_recent_pivots(clear=True)
@@ -149,7 +163,7 @@ class PivotView(webapp.RequestHandler):
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "pivot.html", \
                 {"prefs": prefs, 'url': pivot.project.url, 'key': key, \
-                'css': pivot.css, 'id': pivot.id}))
+                'css': pivot.css, 'id': pivot.id, 'pivot': pivot}))
 
 
 class PivotDetails(webapp.RequestHandler):
@@ -165,7 +179,7 @@ class PivotDetails(webapp.RequestHandler):
     def post(self, id):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
-        logging.info("update pivot")
+        #logging.info("update pivot")
 
         # project
         project_key = decode(self.request.get('project_key'))
@@ -206,7 +220,7 @@ class Preview(webapp.RequestHandler):
         # have to memcache preview for proxy to pick it up
         key = random.randint(0, 100000000000000)
         memcache.set("_pivotpreview-%s" % key, css)
-        logging.info("set mc [%s]: %s" % (key, css))
+        #logging.info("set mc [%s]: %s" % (key, css))
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "pivot.html", \
                 {"prefs": prefs, 'url': url, 'key': key, 'css': css, \
@@ -272,7 +286,7 @@ class ProxyView(webapp.RequestHandler):
 
         try:
             encoding = result.headers['content-type'].split('charset=')[-1]
-            logging.info(encoding)
+            #logging.info(encoding)
             res = unicode(result.content, encoding)
         except:
             res = unicode(result.content, errors='replace')
