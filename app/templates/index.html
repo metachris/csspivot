@@ -47,13 +47,6 @@ function valid() {
 </form>
 
 
-<div style="margin-top:40px;">
-    {% if prefs %}
-    <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
-    {% else %}
-    <a href="/login?continue=/{{ id }}" class="myButton" title="Lots of good stuff!">Sign In</a> 
-    {% endif %}
-</div>
 
 <div style="margin-top:40px;">
 <div id="_recent"></div>
@@ -80,7 +73,18 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
     }
 </script>
 
-<div style="width:150px; margin:auto; margin-top:50px; text-align:center;">
+
+<div style="margin-top:40px;">
+    {% if prefs %}
+    <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
+    {% else %}
+    <a href="/login?continue=/{{ id }}" class="btn" title="Lots of good stuff!" style="width:80px;">Sign In</a> 
+    &nbsp;&nbsp;
+    <a href="/login?continue=/{{ id }}" class="btn" title="Lots of good stuff!" style="width:80px;">Tour</a> 
+    {% endif %}
+</div>
+
+<div style="width:150px; margin:auto; margin-top:60px; text-align:center;">
     <div style="float:left;">
         <a href="http://twitter.com/share" class="twitter-share-button" data-counturl="http://www.csspivot.com" data-url="http://www.csspivot.com"  data-text="Modify and share the CSS of any website:" data-count="vertical" data-via="csspivot">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
