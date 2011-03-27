@@ -207,7 +207,7 @@ def proxy(url, css, comment, id=None, showdialog=False):
         res = """%s%s%s""" % (res[:pos.end()], header, res[pos.end():])
 
     # Inject css
-    inject = """<style>%s</style>""" % css
+    inject = """<style>%s body { margin:0px; padding:0px; }</style>""" % css
     pos = re.search("</head", res, re.IGNORECASE)
     if not pos:
         # no /head tag
