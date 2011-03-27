@@ -90,6 +90,11 @@ function showpivots(i) {
         $("#discover_pivotlist").html($("#_recent").html());
         $("#dialog_pivots").dialog("open");
         $("#dialog_pivots").dialog("option", "title", 'New Pivots'); 
+
+    } else if (i == 1) {
+        $("#discover_pivotlist").html($("#_examples").html());
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'Selected Pivots'); 
     }
 }
 

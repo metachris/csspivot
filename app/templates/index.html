@@ -93,6 +93,7 @@ function discover() {
         <ul>
             <li><a href="javascript:showpivots(0)">New pivots</a></li>
             <li><a href="javascript:showpivots(4)">Recently viewed</a></li>
+            <li><a href="javascript:showpivots(1)">Selected Examples</a></li>
             <!--<li><a href="javascript:showpivots(1)">Pivots by domain</a></li>
             <li><a href="javascript:showpivots(2)">Heavy improvements</a></li>
             <li><a href="javascript:showpivots(3)">Most viewed</a></li>
@@ -108,4 +109,11 @@ function discover() {
 
 
 <div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> <small>({{ pivot.project.url }})</small>{% endfor %}</div>
+<div id="_examples" style="display:none;"><ul>
+<li><a href="http://www.csspivot.com/GMKAW">Reddit Extended</a></li>
+<li><a href="http://www.csspivot.com/0nF1j">Dribble Variation</a></li>
+<li><a href="http://www.csspivot.com/Dlmtt">Dark Hacker News</a></li>
+<li><a href="http://www.csspivot.com/014dy">Green Techcrunch</a></li>
+</ul></div>
+
 {% endblock %}
