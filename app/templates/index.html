@@ -13,7 +13,7 @@ $(document).ready(function() {
 	$(".btn").button();
 
     $("#dialog_discover").dialog({ autoOpen: false });
-    $("#dialog_pivots").dialog({ autoOpen: false });
+    $("#dialog_pivots").dialog({ autoOpen: false, width:360 });
 });
 
 function valid() {
@@ -108,7 +108,7 @@ function discover() {
 </div>
 
 
-<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> <small>({{ pivot.project.url }})</small>{% endfor %}</div>
+<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} style{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
 <div id="_examples" style="display:none;"><ul>
 <li><a href="http://www.csspivot.com/GMKAW">Reddit Extended</a></li>
 <li><a href="http://www.csspivot.com/0nF1j">Dribble Variation</a></li>

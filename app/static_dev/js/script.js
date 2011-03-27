@@ -110,5 +110,3 @@ function showpivots(i) {
 
 
 
-
-

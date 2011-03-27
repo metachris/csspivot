@@ -31,5 +31,10 @@ def truncate_chars(value, maxlen):
         return value[:maxlen - 3] + '...'
 
 
+def styles_count(css):
+    return css.count(":")
+
+
 register.filter(getItem)
 register.filter(truncate_chars)
+register.filter(styles_count)

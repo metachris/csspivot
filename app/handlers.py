@@ -93,6 +93,7 @@ class Main(webapp.RequestHandler):
         invalid_url = decode(self.request.get('u'))
         recent = get_recent_pivots()[:10]
 
+        webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
                 'recent': recent}))
