@@ -3,6 +3,7 @@ import os
 
 from google.appengine.api import users
 from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 
 from google.appengine.ext import db
 from google.appengine.ext import webapp
@@ -66,14 +67,32 @@ class LogOut(webapp.RequestHandler):
         self.redirect(url)
 
 
+def get_recent_pivots(clear=False):
+    if clear:
+        memcache.delete("pivots_recent")
+        return
+    pivots = memcache.get("pivots_recent")
+    if pivots:
+        logging.info("return cached pivots")
+        return pivots
+    pivots = []
+    for pivot in Pivot.all().order("-date_submitted").fetch(10):
+        pivots.append(pivot)
+    memcache.set("pivots_recent", pivots)
+    return pivots
+
+
 # Custom sites
 class Main(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
         invalid_url = decode(self.request.get('u'))
+        recent = get_recent_pivots()[:5]
+
         self.response.out.write(template.render(tdir + "index.html", \
-                {"prefs": prefs, 'invalid_url': invalid_url}))
+                {"prefs": prefs, 'invalid_url': invalid_url, \
+                'recent': recent}))
 
     def post(self):
         user = users.get_current_user()

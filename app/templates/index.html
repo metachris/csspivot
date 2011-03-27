@@ -51,25 +51,30 @@ Modify and share CSS styles for any website
 </form>
 
 
+<div style="margin-top:60px;">
 <div id="_recent"></div>
+New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+</div>
 <script type="text/javascript">
     recent = localStorage.getItem("pivots_recentlyviewed");
     out = "";
     if (recent) {
     arr = recent.split(",");
-        for (i in arr) {
+        for (i in arr) {            
             if (arr[i] != "") {
                 comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
                 url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
                 out += "<a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a>, ";
             }
+            if (i > 20) break;
         }
     }
     if (out.length > 2) {
         out = out.substr(0, out.length-2);
-        document.getElementById("_recent").innerHTML = "<div style='margin-top:60px;'>Recently viewed: " + out + "</div>";
+        document.getElementById("_recent").innerHTML = "<div style='margin-bottom:10px;'>Recently viewed: " + out + "</div>";
     }
 </script>
+
 
 <div style="width:150px; margin:auto; margin-top:50px; text-align:center;">
     <div style="float:left;">
