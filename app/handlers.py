@@ -288,6 +288,6 @@ class AccountView(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
-
+        webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "account.html", \
                 {"prefs": prefs}))

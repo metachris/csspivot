@@ -17,7 +17,7 @@ $(document).ready(function() {
 <td width="300px" style="text-align:left;"><p>Your pivots</p>
 <ul style="text-align:left;">
     {% for pivot in prefs.pivot_set %}
-    <li><a href="/{{ pivot.id }}">{{ pivot.id }}</a> <small>({{ pivot.project.url }})</small></li>
+    <li><a href="/{{ pivot.id }}">{{ pivot.id }}</a> <small>({{ pivot.project.url|truncate_chars:26 }})</small></li>
     {% endfor %}
 </ul>
 </td>
@@ -33,7 +33,8 @@ $(document).ready(function() {
             if (arr[i] != "") {
                 comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
                 url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
-                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" + url + ")</small></li>";
+                url = url.length > 26 ? url.substr(0, 26) + "..." : url;
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" +  url + ")</small></li>";
             }
             if (i > 20) break;
         }
