@@ -204,7 +204,8 @@ def proxy(url, css, comment, id=None, showdialog=False):
         logging.info(encoding)
         res = unicode(result.content, encoding)
     except:
-        res = unicode(result.content)
+        #res = unicode(result.content)
+        res = unicode(result.content, errors='replace')
 
     # Update all links
     res = res.replace('src="', 'src="%s/' % url.strip("/"))
