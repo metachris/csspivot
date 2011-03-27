@@ -17,11 +17,12 @@ urls = [
     (r'/login', LogIn),
     (r'/_ah/login_required', LogIn),
     (r'/logout', LogOut),
-    (r'/account', Account),
+    (r'/account', AccountView),
     (r'/preview', Preview),
     (r'/', Main),
     (r'/([-\w]+)[/]?', PivotView),
     (r'/([-\w]+)[/]?/details', PivotDetails),
+    (r'/(.*)', UserView),
 ]
 
 application = webapp.WSGIApplication(urls, debug=True)

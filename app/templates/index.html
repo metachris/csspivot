@@ -26,11 +26,7 @@ function valid() {
 {% endblock %}
 
 {% block main %}
-<div style="margin:40px 0px 26px 0px;">
-    <a href="http://www.csspivot.com"><img src="/images/logo.png" width="162" height="32" border="0" /></a>
-</div>
-
-Modify CSS styles on any website and share the result
+<p>Modify CSS styles on any website and share the result</p>
 
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
 <div style="padding-left:26px; margin-top:40px;">
@@ -51,7 +47,15 @@ Modify CSS styles on any website and share the result
 </form>
 
 
-<div style="margin-top:60px;">
+<div style="margin-top:20px;">
+    {% if prefs %}
+    <a href="/account">{{ prefs.nickname }}</a>
+    {% else %}
+    <a href="/login?continue=/{{ id }}">sign in</a> 
+    {% endif %}
+</div>
+
+<div style="margin-top:40px;">
 <div id="_recent"></div>
 New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 </div>

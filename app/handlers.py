@@ -129,64 +129,7 @@ class Main(webapp.RequestHandler):
         self.redirect("/%s" % p.id)
 
 
-class Account(webapp.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-        prefs = InternalUser.from_user(user)
-        self.response.out.write(template.render(tdir + "index.html", \
-                {"prefs": prefs}))
-
-
-class AssestHandler(webapp.RequestHandler):
-    def get(self):
-        url = "http://news.ycombinator.com" + self.request.path
-        if self.request.query_string is not None:
-            url = url + '?' + self.request.query_string
-
-        if 'user' in self.request.cookies:
-            fetch_headers = {'Cookie': 'user=' + self.request.cookies['user']}
-            result = urlfetch.fetch(url, headers=fetch_headers, \
-                    follow_redirects=False, deadline=10)
-        else:
-            result = urlfetch.fetch(url, follow_redirects=False, deadline=10)
-
-        if 'set-cookie' in result.headers:
-            self.response.headers.add_header('set-cookie', \
-                    result.headers.get('set-cookie'))
-
-        if 'location' in result.headers:
-            self.redirect(result.headers.get('location'))
-        else:
-            self.response.headers.add_header('content-type', \
-                    result.headers['content-type'])
-            self.response.out.write(result.content)
-
-    def post(self):
-        url = "http://news.ycombinator.com" + self.request.path
-        post_data = ''
-        for arg in self.request.arguments():
-            post_data += arg + '=' + self.request.get(arg) + '&'
-        post_data = post_data[:-1]
-        if 'user' in self.request.cookies:
-            fetch_headers = {'Cookie': 'user=' + self.request.cookies['user']}
-            result = urlfetch.fetch(url, method=urlfetch.POST, \
-                    headers=fetch_headers, payload=post_data, \
-                    follow_redirects=False, deadline=10)
-        else:
-            result = urlfetch.fetch(url, method=urlfetch.POST, \
-                    payload=post_data, follow_redirects=False, deadline=10)
-
-        if 'set-cookie' in result.headers:
-            self.response.headers.add_header('set-cookie', \
-                    result.headers.get('set-cookie'))
-
-        if 'location' in result.headers:
-            self.redirect(result.headers.get('location'))
-        else:
-            self.response.out.write(result.content)
-
-
-def proxy(url, css, comment, id=None, showdialog=False):
+def proxy(url, css, comment, id=None, showdialog=False, prefs=None):
     if not url:
         return "Not a valid url (%s)" % url
 
@@ -225,7 +168,8 @@ def proxy(url, css, comment, id=None, showdialog=False):
 
     # Inject header html
     header = template.render(tdir + "inject_header.html", \
-            {'id': id, 'url': url, 'css': css, 'comment': comment})
+            {'id': id, 'url': url, 'css': css, 'comment': comment, \
+            'prefs': prefs})
     pos = re.search("<body[^>]*>(.*?)", res, re.IGNORECASE)
     if pos:
         res = """%s%s%s""" % (res[:pos.end()], header, res[pos.end():])
@@ -261,13 +205,16 @@ def proxy(url, css, comment, id=None, showdialog=False):
 
 class PivotView(webapp.RequestHandler):
     def get(self, id):
-        logging.info("load pivot %s" % id)
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
         pivot = Pivot.all().filter("id =", id).get()
         if not pivot:
             self.error(404)
             return
 
-        res = proxy(pivot.project.url, pivot.css, pivot.comment, id=id)
+        res = proxy(pivot.project.url, pivot.css, pivot.comment, id=id, \
+                prefs=prefs)
         self.response.out.write(res)
 
 
@@ -324,8 +271,23 @@ class Preview(webapp.RequestHandler):
         #self.response.out.write(template.render(tdir + "pivot_preview.html", \
         #        {"prefs": prefs, 'url': url, 'css': css}))
         #return
-        res = proxy(url, css, comment, showdialog=showdialog)
+        res = proxy(url, css, comment, showdialog=showdialog, prefs=prefs)
         if res:
             self.response.out.write(res)
         else:
             self.redirect("/?u=%s" % url)
+
+
+class UserView(webapp.RequestHandler):
+    def get(self, username):
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+
+class AccountView(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        self.response.out.write(template.render(tdir + "account.html", \
+                {"prefs": prefs}))

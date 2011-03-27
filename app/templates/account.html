@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".btn").button();
+});
+</script>
+{% endblock %}
+
+{% block main %}
+<h1>{{ prefs.nickname }}</h1>
+<a href="/logout">sign out</a>
+
+<div style="margin:40px 20px 0px 108px; text-align:center;">
+<table width=""><tr>
+<td width="300px" style="text-align:left;"><p>Your pivots</p>
+<ul style="text-align:left;">
+    {% for pivot in prefs.pivot_set %}
+    <li><a href="/{{ pivot.id }}">{{ pivot.id }}</a> <small>({{ pivot.project.url }})</small></li>
+    {% endfor %}
+</ul>
+</td>
+
+<td style="text-align:left;"><p>Recently viewed</p>
+<div id="_recent"></div>
+<script type="text/javascript">
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    out = "";
+    if (recent) {
+    arr = recent.split(",");
+        for (i in arr) {            
+            if (arr[i] != "") {
+                comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
+                url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" + url + ")</small></li>";
+            }
+            if (i > 20) break;
+        }
+    }
+    if (out.length > 2) {
+        out = out.substr(0, out.length-2);
+        document.getElementById("_recent").innerHTML = "<ul>" + out + "</ul>";
+    }
+</script>
+</td>
+
+</tr></table>
+</div>
+{% endblock %}
