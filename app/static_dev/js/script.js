@@ -78,7 +78,7 @@ function showpivots(i) {
                 //console.log(arr[i]);
                 cnt = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_cnt");
                 cnt_txt = "";
-                if (cnt) { if (cnt > 0) cnt_txt = " &middot; " + cnt + " style"; if (cnt > 1) cnt_txt += "s"; }
+                if (cnt) { if (cnt > 0) cnt_txt = " &middot; " + cnt + " change"; if (cnt > 1) cnt_txt += "s"; }
                 url = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_url");
                 out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> &middot; <small>" + url + cnt_txt + "</small></li>";
             }

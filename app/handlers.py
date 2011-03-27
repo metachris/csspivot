@@ -88,20 +88,20 @@ def get_recent_pivots(clear=False):
 
 def get_heavy_pivots(clear=False):
     if clear:
-        memcache.delete("pivots_heavy")
+        memcache.delete("pivots_heavy2")
         return
 
-    pivots = memcache.get("pivots_heavy")
+    pivots = memcache.get("pivots_heavy2")
     if pivots:
         #logging.info("return cached pivots")
         return pivots
     pivots = []
 
-    for pivot in Pivot.all():
-        pivots.append((pivot.css.count(":"), pivot))
-    pivots.sort(reverse=True)
+    for pivot in Pivot.all().order("-date_submitted"):
+        if pivot.styles_count > 2:
+            pivots.append((pivot.styles_count, pivot))
 
-    memcache.set("pivots_heavy", pivots[:20])
+    memcache.set("pivots_heavy2", pivots[:20])
     return pivots
 
 
@@ -385,7 +385,7 @@ class AboutView(webapp.RequestHandler):
             logging.info("feedback '%s' from %s" % (msg, sender))
             message = mail.EmailMessage()
             message.sender = "CSS Pivot <hello@csspivot.com>"
-            message.to = "hello@csspivot.com"
+            message.to = "metakaram@gmail.com"
             message.subject = "CSS Pivot Feedback"
             message.body = "Feedback from '%s':\n\n%s" % (sender, msg)
             message.send()

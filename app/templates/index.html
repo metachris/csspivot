@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     $("#dialog_discover").dialog({ autoOpen: false });
     $("#dialog_pivots").dialog({ autoOpen: false, width:360 });
-    $("#dialog_feedback").dialog({ width:450 });
+    $("#dialog_feedback").dialog({ autoOpen: false, width:450 });
 });
 
 function valid() {
@@ -97,8 +97,8 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
     <div id="index" style="margin:10px 0px;">
         <ul>
             <li><a href="javascript:showpivots(0)">New pivots</a></li>
+            <li><a href="javascript:showpivots(2)">New pivots with several changes</a></li>
             <li><a href="javascript:showpivots(4)">Recently viewed</a></li>
-            <li><a href="javascript:showpivots(2)">Most added styles</a></li>
             <li><a href="javascript:showpivots(1)">Selected examples</a></li>
             <!--<li><a href="javascript:showpivots(1)">Pivots by domain</a></li>
             <li><a href="javascript:showpivots(3)">Most viewed</a></li>
@@ -113,14 +113,15 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 </div>
 
 
-<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} style{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
-<div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ cnt }} style{{ cnt|pluralize }}</small>{% endfor %}</div>
+<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} change{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
+<div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.project.url|truncate_chars:26 }} &middot; {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}</small>{% endfor %}</div>
 <div id="_examples" style="display:none;"><ul>
 <li><a href="http://www.csspivot.com/GMKAW">Reddit Extended</a></li>
 <li><a href="http://www.csspivot.com/0nF1j">Dribble Variation</a></li>
 <li><a href="http://www.csspivot.com/rqAfu">Anon Google</a></li>
 <li><a href="http://www.csspivot.com/PRGZ3">Light Hacker News</a></li>
 <li><a href="http://www.csspivot.com/014dy">Green Techcrunch</a></li>
+<li><a href="http://www.csspivot.com/6N31F">Cray CSS Pivot Variation</a></li>
 </ul></div>
 
 {% endblock %}
