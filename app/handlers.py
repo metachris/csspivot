@@ -14,6 +14,7 @@ import hashlib
 import random
 import string
 import urllib
+import traceback
 
 from models import *
 
@@ -303,7 +304,8 @@ class ProxyView(webapp.RequestHandler):
             result = urlfetch.fetch(url, headers=headers, \
                     follow_redirects=True, deadline=10)
         except:
-            logging.warning("urlfetch error [%s]" % url)
+            logging.warning("urlfetch error [%s]: %s" % (url, \
+                    traceback.format_exc()))
             return None
 
         for header in result.headers:
