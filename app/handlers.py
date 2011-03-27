@@ -218,6 +218,7 @@ def proxy(url, css, comment, id=None, showdialog=False):
     # Revert absolute links
     res = res.replace("%s//" % url.strip("/"), "%s/" % url.strip("/"))
     res = res.replace("%s/http" % url.strip("/"), "http")
+    res = res.replace("%s//" % url.strip("/"), "//")
 
     # Inject header html
     header = template.render(tdir + "inject_header.html", \
