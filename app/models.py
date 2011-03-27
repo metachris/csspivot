@@ -9,8 +9,8 @@ from google.appengine.api import users
 
 class InternalUser(db.Model):
     nickname = db.StringProperty()
-    email = db.StringProperty(default="")
-    email_md5 = db.StringProperty(default="")  # used for gravatar
+    email = db.StringProperty(required=False)
+    email_md5 = db.StringProperty(required=False)  # used for gravatar
 
     federated_identity = db.StringProperty()
     federated_provider = db.StringProperty()
@@ -54,14 +54,18 @@ class InternalUser(db.Model):
                 if not nick or "http://" in nick:
                     nick = user.email()
 
-            m = md5(user.email().strip().lower()).hexdigest()
+            mail = user.email().strip()
+            m = md5(mail.lower()).hexdigest() if mail else ""
+            if not mail:
+                mail = " "  # bugfix for InternalUser requires email...
 
             logging.info("_ create new internaluser")
             fed_id = user.federated_identity()
             fed_prov = user.federated_provider()
             prefs = InternalUser(federated_identity=fed_id,\
-                federated_provider=fed_prov, nickname=nick, \
-                email=user.email(), email_md5=m)
+                federated_provider=fed_prov, nickname=nick, email=mail)
+            prefs.email_md5 = m
+
             prefs.google_user_id = user.user_id()
             prefs.put()
 

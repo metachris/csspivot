@@ -47,11 +47,11 @@ function valid() {
 </form>
 
 
-<div style="margin-top:20px;">
+<div style="margin-top:40px;">
     {% if prefs %}
-    <a href="/account">{{ prefs.nickname }}</a>
+    <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
     {% else %}
-    <a href="/login?continue=/{{ id }}">sign in</a> 
+    <a href="/login?continue=/{{ id }}" class="myButton" title="Lots of good stuff!">Sign In</a> 
     {% endif %}
 </div>
 
@@ -79,7 +79,6 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
         document.getElementById("_recent").innerHTML = "<div style='margin-bottom:10px;'>Recently viewed: " + out + "</div>";
     }
 </script>
-
 
 <div style="width:150px; margin:auto; margin-top:50px; text-align:center;">
     <div style="float:left;">
