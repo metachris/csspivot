@@ -7,6 +7,12 @@
 
 #openid_form {
 	width: 580px;
+	margin:auto;
+}
+
+#openid_form #openid_btns {
+    margin-left:20px;
+    margin-top:24px;
 }
 
 #openid_form legend {
