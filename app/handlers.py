@@ -84,6 +84,9 @@ def get_recent_pivots(clear=False):
 
 # Custom sites
 class Main(webapp.RequestHandler):
+    def head(self, screen_name=None):
+        return
+
     def get(self):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
@@ -213,6 +216,7 @@ class PivotView(webapp.RequestHandler):
             self.error(404)
             return
 
+        webapp.template.register_template_library('common.templateaddons')
         res = proxy(pivot.project.url, pivot.css, pivot.comment, id=id, \
                 prefs=prefs)
         self.response.out.write(res)
@@ -271,6 +275,7 @@ class Preview(webapp.RequestHandler):
         #self.response.out.write(template.render(tdir + "pivot_preview.html", \
         #        {"prefs": prefs, 'url': url, 'css': css}))
         #return
+        webapp.template.register_template_library('common.templateaddons')
         res = proxy(url, css, comment, showdialog=showdialog, prefs=prefs)
         if res:
             self.response.out.write(res)

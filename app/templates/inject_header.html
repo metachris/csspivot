@@ -1,11 +1,12 @@
 <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 <style type="text/css">
     #csspivot {
-        padding:3px 10px 2px 10px;
+        padding:4px 10px 0px 10px;
         border-bottom:1px solid gray;
         background:#fafafa; 
         font:13px/1.231 arial;
         text-align:left;
+        color:#444;
     }
     #csspivot a {
         color:#444;
@@ -18,17 +19,22 @@
         text-decoration:underline;
     }
     #csspivot img {
-        padding-left:5px;
+        padding-left:2px;
+        margin-top:2px;
     }
 </style>
 
 <div id='csspivot' style="">
     <div style="float:right; margin-top:-1px;">
+    <div style="float:left; padding-top:1px;"><small>
         {% if prefs %}
         <a href="/account">{{ prefs.nickname }}</a>
         {% else %}
-        <a href="/login?continue=/{{ id }}">sign in</a> 
+        <a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a> 
         {% endif %}
+    </small> &middot; <small>share via&nbsp; </small></div>
+    <a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" target="_blank"><img src="/images/fb.png" /></a>
+    <a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" target="_blank"><img src="/images/twitter.png" /></a>
     </div>
     <div style="">
         <a href=" /"><b>CSS Pivot</b></a> 
