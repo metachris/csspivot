@@ -59,7 +59,7 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 
 
-<div style="margin-top:70px; margin-bottom:60px">
+<div style="margin-top:70px; margin-bottom:50px">
     {% if prefs %}
     <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
     <div style="margin-top:20px;"><a href="javascript:discover()" class="btn">Discover Pivots</a></div>
@@ -71,6 +71,10 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
     <a href="/tour" class="btn" title="More infos on how this works" style="width:80px;">Tour</a> 
     {% endif %}
 </div>
+
+<hr style="width:40%; margin:auto;">
+
+<div style="margin:10px 0px; font-size:90%; color:#AAA;">{{ pivot_count }} pivots and counting</div>
 
 <hr style="width:40%; margin:auto;">
 

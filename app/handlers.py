@@ -69,6 +69,21 @@ class LogOut(webapp.RequestHandler):
         self.redirect(url)
 
 
+def get_pivot_count(clear=False):
+    if clear:
+        memcache.delete("pivotcnt")
+        return
+
+    cnt = memcache.get("pivotcnt")
+    if cnt:
+        #logging.info("return cached pivots")
+        return cnt
+
+    cnt = Pivot.all().count()
+    memcache.set("pivotcnt", cnt)
+    return cnt
+
+
 def get_recent_pivots(clear=False):
     if clear:
         memcache.delete("pivots_recent")
@@ -121,7 +136,8 @@ class Main(webapp.RequestHandler):
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
-                'recent': recent, 'heavy': heavy}))
+                'recent': recent, 'heavy': heavy, \
+                'pivot_count': get_pivot_count()}))
 
     def post(self):
         user = users.get_current_user()
@@ -190,6 +206,7 @@ class Main(webapp.RequestHandler):
         # Clear Cache
         get_recent_pivots(clear=True)
         get_heavy_pivots(clear=True)
+        get_pivot_count(clear=True)
 
         self.redirect("/%s" % p.id)
 
