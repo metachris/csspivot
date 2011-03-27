@@ -58,7 +58,7 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
     if (recent) {
     arr = recent.split(",");
         for (i in arr) {       
-            {% if not prefs %}if (i == 3) { out += "<a href='/login?continue=/' title='Sign in for more history'>more</a>  "; break; }{% endif %}     
+            {% if not prefs %}if (i == 3) { out += "<a href='/login?continue=/account' title='Sign in for more history'>more</a>  "; break; }{% endif %}     
             if (arr[i] != "") {
                 comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
                 url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
@@ -74,13 +74,14 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
 </script>
 
 
-<div style="margin-top:40px;">
+
+<div style="margin-top:50px;">
     {% if prefs %}
     <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
     {% else %}
-    <a href="/login?continue=/{{ id }}" class="btn" title="Lots of good stuff!" style="width:80px;">Sign In</a> 
+    <a href="/login?continue=/" class="btn" title="Lots of good stuff!" style="width:80px;">Sign In</a> 
     &nbsp;&nbsp;
-    <a href="/login?continue=/{{ id }}" class="btn" title="Lots of good stuff!" style="width:80px;">Tour</a> 
+    <a href="/tour" class="btn" title="Lots of good stuff!" style="width:80px;">Tour</a> 
     {% endif %}
 </div>
 

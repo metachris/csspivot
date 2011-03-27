@@ -20,6 +20,7 @@ urls = [
     (r'/account', AccountView),
     (r'/preview', Preview),
     (r'/proxy', ProxyView),
+    (r'/tour', TourView),
     (r'/proxy/([-\w]+)[/]?', ProxyView),
     (r'/', Main),
     (r'/([-\w]+)[/]?', PivotView),

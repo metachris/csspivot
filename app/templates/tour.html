@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <title>Tour - CSS Pivot</title>
+  <meta name="description" content="See how CSS Pivot works!">
+{% endblock %}
+  
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".btn").button();
+});
+</script>
+{% endblock %}
+
+{% block main %}
+
+<h1>Tour</h1>
+
+<div style="text-align:left; width:500px; margin:auto; margin-top:30px; margin-bottom:150px;">
+<h2>About</h2>
+<p>CSS Pivot lets you add custom CSS styles to any website and makes it easy to share the result
+with a short link. An easy way to test it is by adding "<code>html, body { background: green; }</code>"
+to a website.
+</p>
+
+<br>
+<h2>Opening a website</h2>
+<p>The first step is to add an URL to open (on the <a href="/">frontpage</a>):</p>
+
+<p><img src="http://tapdom.com/img/x/tour1.png" width="400px"/></p>
+
+<h2>Adding CSS styles</h2>
+<p>You can add styles in the dialog, and hit "Preview" to see how it looks:</p>
+
+<p><img src="http://tapdom.com/img/x/tour2.png" width="500px"/></p>
+
+
+<br>
+<h2>Short link and Sharing</h2>
+<p>When you save your pivot, you'll get a custom short url like this:</p>
+
+<p><img src="http://tapdom.com/img/x/tour3.png" width="500px"/></p>
+
+<br>
+
+<br>
+<h2>Examples</h2>
+<ul>
+<li><a href="http://www.csspivot.com/Dlmtt">Dark Hacker News</a></li>
+<li><a href="http://www.csspivot.com/014dy">Green Techcrunch</a></li>
+<li><a href="http://www.csspivot.com">Try your own!</a></li>
+</ul>
+
+<br>
+<h2>User Accounts</h2>
+<p>Registered accounts have many benefits, including the ability to manage, edit and delete
+your pivots, vanity urls, sharing options, and a lot more (some of it has yet to be implemented though :).</p>
+
+<br>
+
+{% if not prefs %}
+<a href="/login?continue=/" class="btn" title="Lots of good stuff!" style="width:80px;">Sign In</a> 
+{% endif %}
+
+</div>
+{% endblock %}

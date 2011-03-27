@@ -228,6 +228,15 @@ class AccountView(webapp.RequestHandler):
                 {"prefs": prefs}))
 
 
+class TourView(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+        webapp.template.register_template_library('common.templateaddons')
+        self.response.out.write(template.render(tdir + "tour.html", \
+                {"prefs": prefs}))
+
+
 class ProxyView(webapp.RequestHandler):
     def post(self):
         return self.get()
