@@ -59,23 +59,22 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 
 
-<div style="margin-top:50px;">
+<div style="margin-top:70px; margin-bottom:60px">
     {% if prefs %}
     <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
+    <div style="margin-top:20px;"><a href="javascript:discover()" class="btn">Discover Pivots</a></div>
     {% else %}
     <a href="/login?continue=/" class="btn" title="Lots of good stuff!" style="width:80px;">Sign In</a> 
+    &nbsp;&nbsp;
+    <a href="javascript:discover()" class="btn">Discover Pivots</a>
     &nbsp;&nbsp;
     <a href="/tour" class="btn" title="More infos on how this works" style="width:80px;">Tour</a> 
     {% endif %}
 </div>
 
+<hr style="width:40%; margin:auto;">
 
-<div style="margin-top:40px;">
-<a href="javascript:discover()" class="btn">Discover Pivots</a>
-</div>
-
-
-<div style="width:150px; margin:auto; margin-top:60px; text-align:center;">
+<div style="width:150px; margin:auto; margin-top:20px; margin-bottom:20px; text-align:center;">
     <div style="float:left;">
         <a href="http://twitter.com/share" class="twitter-share-button" data-counturl="http://www.csspivot.com" data-url="http://www.csspivot.com"  data-text="Modify and share the CSS of any website:" data-count="vertical" data-via="csspivot">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
@@ -85,7 +84,9 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
     <div style="clear:both;"></div>
 </div>
 
-<div style="margin-top:50px; text-align:center;">
+<hr style="width:40%; margin:auto;">
+
+<div style="margin-top:20px; text-align:center;">
 <a href="javascript:feedback()">Feedback</a> &middot; <a target="_blank" href="http://twitter.com/csspivot">Twitter</a>
 <!--
 <a href="javascript:feedback()"><img src="/images/twitter_us.png" /></a>
