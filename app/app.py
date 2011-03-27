@@ -19,6 +19,8 @@ urls = [
     (r'/logout', LogOut),
     (r'/account', AccountView),
     (r'/preview', Preview),
+    (r'/proxy', ProxyView),
+    (r'/proxy/([-\w]+)[/]?', ProxyView),
     (r'/', Main),
     (r'/([-\w]+)[/]?', PivotView),
     (r'/([-\w]+)[/]?/details', PivotDetails),

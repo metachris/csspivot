@@ -132,80 +132,6 @@ class Main(webapp.RequestHandler):
         self.redirect("/%s" % p.id)
 
 
-def proxy(url, css, comment, id=None, showdialog=False, prefs=None):
-    if not url:
-        return "Not a valid url (%s)" % url
-
-    if not "://" in url:
-        url = "http://%s" % url
-    logging.info("proxy: %s" % url)
-
-    # Read url and decode content
-    try:
-        result = urlfetch.fetch(url, follow_redirects=True, deadline=10)
-    except:
-        logging.warning("urlfetch error [%s]" % url)
-        return None
-
-    logging.info(result.headers)
-    try:
-        encoding = result.headers['content-type'].split('charset=')[-1]
-        logging.info(encoding)
-        res = unicode(result.content, encoding)
-    except:
-        #res = unicode(result.content)
-        res = unicode(result.content, errors='replace')
-
-    # Update all links
-    res = res.replace('src="', 'src="%s/' % url.strip("/"))
-    res = res.replace("src='", "src='%s/" % url.strip("/"))
-    #res = res.replace("'/", "'%s/" % url.strip("/"))
-    res = res.replace('href="', 'href="%s/' % url.strip("/"))
-    res = res.replace("href='", "href='%s/" % url.strip("/"))
-    res = res.replace('url(', 'url(%s/' % url.strip("/"))
-
-    # Revert absolute links
-    res = res.replace("%s//" % url.strip("/"), "%s/" % url.strip("/"))
-    res = res.replace("%s/http" % url.strip("/"), "http")
-    res = res.replace("%s//" % url.strip("/"), "//")
-
-    # Inject header html
-    header = template.render(tdir + "inject_header.html", \
-            {'id': id, 'url': url, 'css': css, 'comment': comment, \
-            'prefs': prefs})
-    pos = re.search("<body[^>]*>(.*?)", res, re.IGNORECASE)
-    if pos:
-        res = """%s%s%s""" % (res[:pos.end()], header, res[pos.end():])
-
-    # Inject css
-    inject = """<style>%s body { margin:0px; padding:0px; }</style>""" % css
-    pos = re.search("</head", res, re.IGNORECASE)
-    if not pos:
-        # no /head tag
-        pos = re.search("<body", res, re.IGNORECASE)
-    if pos:
-        res = """%s%s%s""" % (res[:pos.start()], inject, res[pos.start():])
-
-    # Inject footer html
-    footer = template.render(tdir + "inject_footer.html", \
-            {'id': id, 'url': url, 'css': css, 'comment': comment,
-            'showdialog': showdialog})
-    pos = re.search("</body", res, re.IGNORECASE)
-    if not pos:
-        pos = re.search("</html", res, re.IGNORECASE)
-    if pos:
-        res = """%s%s%s""" % (res[:pos.start()], footer, res[pos.start():])
-    else:
-        # eg. Google.com
-        res += footer
-
-    pos = re.search("<title>", res, re.IGNORECASE)
-    if pos:
-        res = """%s%s%s""" % (res[:pos.end()], "CSS Pivot: ", res[pos.end():])
-
-    return res
-
-
 class PivotView(webapp.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
@@ -216,10 +142,13 @@ class PivotView(webapp.RequestHandler):
             self.error(404)
             return
 
+        key = random.randint(0, 100000000000000)
+        memcache.set("_pivotpreview-%s" % key, pivot.css)
+
         webapp.template.register_template_library('common.templateaddons')
-        res = proxy(pivot.project.url, pivot.css, pivot.comment, id=id, \
-                prefs=prefs)
-        self.response.out.write(res)
+        self.response.out.write(template.render(tdir + "pivot.html", \
+                {"prefs": prefs, 'url': pivot.project.url, 'key': key, \
+                'css': pivot.css, 'id': pivot.id}))
 
 
 class PivotDetails(webapp.RequestHandler):
@@ -269,18 +198,19 @@ class Preview(webapp.RequestHandler):
 
         url = decode(self.request.get('url'))
         css = urllib.unquote(decode(self.request.get('css')))
-        comment = decode(self.request.get('comment'))
-        showdialog = False if decode(self.request.get('s')) else True
+        showdialog = False if css else True  # no css = new
 
-        #self.response.out.write(template.render(tdir + "pivot_preview.html", \
-        #        {"prefs": prefs, 'url': url, 'css': css}))
-        #return
+        comment = decode(self.request.get('comment'))
+
+        # have to memcache preview for proxy to pick it up
+        key = random.randint(0, 100000000000000)
+        memcache.set("_pivotpreview-%s" % key, css)
+        logging.info("set mc [%s]: %s" % (key, css))
         webapp.template.register_template_library('common.templateaddons')
-        res = proxy(url, css, comment, showdialog=showdialog, prefs=prefs)
-        if res:
-            self.response.out.write(res)
-        else:
-            self.redirect("/?u=%s" % url)
+        self.response.out.write(template.render(tdir + "pivot.html", \
+                {"prefs": prefs, 'url': url, 'key': key, 'css': css, \
+                'id': None, 'showdialog': showdialog}))
+        return
 
 
 class UserView(webapp.RequestHandler):
@@ -296,3 +226,71 @@ class AccountView(webapp.RequestHandler):
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "account.html", \
                 {"prefs": prefs}))
+
+
+class ProxyView(webapp.RequestHandler):
+    def post(self):
+        return self.get()
+
+    def get(self):
+        """ Proxies the content for showing in an iframe """
+        url = decode(self.request.get('url'))
+        key = decode(self.request.get('key'))
+        css = urllib.unquote(decode(self.request.get('css')))
+
+        if not url:
+            self.error(404)
+            return
+
+        if not "://" in url:
+            url = "http://%s" % url
+
+        headers = {}
+        for header in ["User-Agent", "Cache-Control"]:
+            if header in self.request.headers:
+                headers[header] = self.request.headers[header]
+
+        try:
+            result = urlfetch.fetch(url, headers=headers, \
+                    follow_redirects=True, deadline=10)
+        except:
+            logging.warning("urlfetch error [%s]" % url)
+            return None
+
+        for header in result.headers:
+            self.response.headers.add_header(header, result.headers[header])
+
+        try:
+            encoding = result.headers['content-type'].split('charset=')[-1]
+            logging.info(encoding)
+            res = unicode(result.content, encoding)
+        except:
+            res = unicode(result.content, errors='replace')
+
+        # Update all links
+        res = res.replace('src="', 'src="%s/' % url.strip("/"))
+        res = res.replace("src='", "src='%s/" % url.strip("/"))
+        #res = res.replace("'/", "'%s/" % url.strip("/"))
+        res = res.replace('href="', 'href="%s/' % url.strip("/"))
+        res = res.replace("href='", "href='%s/" % url.strip("/"))
+        res = res.replace('url(', 'url(%s/' % url.strip("/"))
+
+        # Revert absolute links
+        res = res.replace("%s//" % url.strip("/"), "%s/" % url.strip("/"))
+        res = res.replace("%s/http" % url.strip("/"), "http")
+        res = res.replace("%s//" % url.strip("/"), "//")
+
+        if not css:
+            css = memcache.get("_pivotpreview-%s" % key)
+            memcache.delete("_pivotpreview-%s" % key)
+
+        # Inject css
+        inject = """<style>%s</style>""" % css
+        pos = re.search("</head", res, re.IGNORECASE)
+        if not pos:
+            # no /head tag
+            pos = re.search("<body", res, re.IGNORECASE)
+        if pos:
+            res = """%s%s%s""" % (res[:pos.start()], inject, res[pos.start():])
+
+        self.response.out.write(res)

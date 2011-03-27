@@ -7,10 +7,10 @@ var previewWindow;
 function preview(showdialog) {
     var form = document.createElement("form");
     form.setAttribute("method", "post");
-    form.setAttribute("action", "/preview");
+    form.setAttribute("action", "/proxy");
     
     // setting form target to a window named 'formresult'
-    //form.setAttribute("target", "previewWindow");
+    form.setAttribute("target", "proxy");
     form.style.display = "none";
     
     var hiddenField = document.createElement("input");              

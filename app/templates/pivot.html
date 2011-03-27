@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <style>
+        #container { width:100%; background:#fafafa; }
+        #main { padding:0px; }
+    </style>
+{% endblock %}
+
+{% block head %}
+  <title>CSS Pivot - {{ url }}</title>
+  <meta name="description" content="CSS pivot for {{ url }}">
+{% endblock %}
+  
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#iframe").height($("#container").height()-26);
+    $(window).resize(function() { $("#iframe").height($("#container").height()-26); });
+
+	$(".csspivot_btn").button();
+    $("#csspivot_cssdialog").dialog({ autoOpen: {% if showdialog %}true{% else %}false{% endif %}, 
+        width: 500, height:350, resizable:false, buttons: [
+        { text: "Preview", click: function() { preview(true); }},
+        { text: "Save", click: function() { if (previewWindow) previewWindow.close(); $("#csspivot_form").submit(); }}
+    ], resize: function(event, ui) { 
+        h = document.getElementById("csspivot_cssdialog").style.height;
+        h = parseInt(h.replace("px", ""));
+        $("#csspivot_css").height(h-14);
+    }});
+});
+
+{% if id %}
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    if (!recent) recent = "";
+    recent = "{{ id }}," + recent.replace("{{ id }},", "");
+    localStorage.setItem("pivots_recentlyviewed", recent);
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_comment", "{{ comment }}");
+    localStorage.setItem("pivots_recentlyviewed_{{ id }}_url", "{{ url }}");
+{% endif %}
+
+function showcss() {
+    $("#csspivot_cssdialog").dialog("open");
+}
+
+</script>
+{% endblock %}
+
+{% block main %}
+{% include "headerbar.html" %}
+
+<iframe src="/proxy?url={{ url }}&key={{ key }}" width="100%" height="100%" name="proxy" id="iframe" scrolling="auto"></iframe>
+
+<div id="csspivot_cssdialog" title="Custom Styles">
+    <form action="/" method="post" id="csspivot_form">
+        <input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
+        <input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
+        <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
+    </form>
+</div>
+
+{% endblock %}

@@ -28,6 +28,7 @@ a:hover {
 #header {
     border-bottom:1px solid lightgray;
     padding:4px 10px;
+    height:22px;
 } 
 
 #header #logo {
