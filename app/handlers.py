@@ -134,6 +134,7 @@ class Main(webapp.RequestHandler):
         css = decode(self.request.get('csspivot_css'))
         comment = decode(self.request.get('csspivot_comment'))
         new = decode(self.request.get('csspivot_new'))
+        orig = decode(self.request.get('csspivot_orig'))
         #logging.info("new: %s" % new)
 
         if not url:
@@ -154,16 +155,35 @@ class Main(webapp.RequestHandler):
                 self.error(403)
                 return
             p.css = css
+
         else:
-            project = Project(userprefs=prefs, id=gen_modelhash(Project), \
-                    title=title, url=url, rand=random.random())
-            project.put()
+            # Create a new pivot. Reference parent pivot+project if exits
+            parent_pivot = None
+            if orig:
+                # pivot has a parent. find that and reference them
+                parent_pivot = Pivot.all().filter("id =", orig).get()
+
+            if parent_pivot:
+                # use existing project
+                project = parent_pivot.project
+
+            else:
+                # create a new project
+                project = Project(userprefs=prefs, id=gen_modelhash(Project), \
+                        title=title, url=url, rand=random.random())
+                project.put()
 
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
                     rand=random.random())
 
-        p.styles_count = p.css.count(":")
+            if parent_pivot:
+                p.parent_pivot = parent_pivot
+                logging.info("parent pivot set")
+
+        if p.css:
+            p.styles_count = p.css.count(":")
+
         p.put()
 
         # Clear Cache

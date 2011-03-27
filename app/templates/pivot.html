@@ -80,6 +80,7 @@ function showcss() {
 <div id="csspivot_cssdialog" title="Custom Styles">
     <form action="/" method="post" id="csspivot_form">
         <input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
+        <input type="hidden" id="csspivot_orig" name="csspivot_orig" value="{{ id }}" />
         <input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
         <input type="hidden" id="csspivot_new" name="csspivot_new" value="0" />
         <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
