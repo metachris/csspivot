@@ -123,6 +123,9 @@ class Main(webapp.RequestHandler):
                 rand=random.random())
         p.put()
 
+        # Clear Cache
+        get_recent_pivots(clear=True)
+
         self.redirect("/%s" % p.id)
 
 
