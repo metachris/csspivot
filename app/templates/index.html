@@ -26,7 +26,7 @@ function valid() {
 {% endblock %}
 
 {% block main %}
-<p>Modify CSS styles on any website and share the result</p>
+<p>Add CSS styles to any website and share the result!</p>
 
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
 <div style="padding-left:26px; margin-top:40px;">
@@ -64,7 +64,8 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
     out = "";
     if (recent) {
     arr = recent.split(",");
-        for (i in arr) {            
+        for (i in arr) {       
+            {% if not prefs %}if (i == 3) { out += "<a href='/login?continue=/' title='Sign in for more history'>more</a>  "; break; }{% endif %}     
             if (arr[i] != "") {
                 comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
                 url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
