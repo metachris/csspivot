@@ -11,6 +11,9 @@ $(document).ready(function() {
     document.getElementById("url").focus();
     $("#url").keydown(function(event) { $("#info_invalidurl").hide(); });
 	$(".btn").button();
+
+    $("#dialog_discover").dialog({ autoOpen: false });
+    $("#dialog_pivots").dialog({ autoOpen: false });
 });
 
 function valid() {
@@ -21,6 +24,10 @@ function valid() {
         $("#info_invalidurl").show();
         return false;
     }
+}
+
+function discover() {
+    $("#dialog_discover").dialog("open");
 }
 </script>
 {% endblock %}
@@ -48,33 +55,6 @@ function valid() {
 
 
 
-<div style="margin-top:40px;">
-<div id="_recent"></div>
-New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
-</div>
-<script type="text/javascript">
-    recent = localStorage.getItem("pivots_recentlyviewed");
-    out = "";
-    if (recent) {
-    arr = recent.split(",");
-        for (i in arr) {       
-            {% if not prefs %}if (i == 3) { out += "<a href='/login?continue=/account' title='Sign in for more history'>more</a>  "; break; }{% endif %}     
-            if (arr[i] != "") {
-                comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
-                url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
-                out += "<a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a>, ";
-            }
-            if (i > 20) break;
-        }
-    }
-    if (out.length > 2) {
-        out = out.substr(0, out.length-2);
-        document.getElementById("_recent").innerHTML = "<div style='margin-bottom:10px;'>Recently viewed: " + out + "</div>";
-    }
-</script>
-
-
-
 <div style="margin-top:50px;">
     {% if prefs %}
     <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
@@ -84,6 +64,12 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
     <a href="/tour" class="btn" title="Lots of good stuff!" style="width:80px;">Tour</a> 
     {% endif %}
 </div>
+
+
+<div style="margin-top:40px;">
+<a href="javascript:discover()" class="btn">Discover Pivots</a>
+</div>
+
 
 <div style="width:150px; margin:auto; margin-top:60px; text-align:center;">
     <div style="float:left;">
@@ -100,4 +86,26 @@ New: {% for pivot in recent %}<a href="/{{ pivot.id }}" title="{{ pivot.project.
 <a href="javascript:feedback()"><img src="/images/twitter_us.png" /></a>
 </div>
 -->
+
+
+<div id="dialog_discover" title="Discover Pivots" style="display:none;">
+    <div id="index" style="margin:10px 0px;">
+        <ul>
+            <li><a href="javascript:showpivots(0)">New pivots</a></li>
+            <li><a href="javascript:showpivots(4)">Recently viewed</a></li>
+            <!--<li><a href="javascript:showpivots(1)">Pivots by domain</a></li>
+            <li><a href="javascript:showpivots(2)">Heavy improvements</a></li>
+            <li><a href="javascript:showpivots(3)">Most viewed</a></li>
+            -->
+        </ul>
+    </div>
+</div>
+
+<div id="dialog_pivots" title="Pivots" style="display:none;">
+    <div style="margin:10px 0px;" id="discover_pivotlist">
+    </div>
+</div>
+
+
+<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.project.url }}">{{ pivot.id }}</a> <small>({{ pivot.project.url }})</small>{% endfor %}</div>
 {% endblock %}

@@ -54,7 +54,44 @@ function preview(showdialog) {
 
 
 
+var pivots_recent;
 
+function get_recent_pivots() {
+    if (pivots_recent) 
+        return pivots_recent;
+
+    recent = localStorage.getItem("pivots_recentlyviewed");
+    if (recent) {
+        arr = recent.split(",");
+        pivots_recent = arr;
+        return pivots_recent;
+    }
+}
+
+function showpivots(i) {
+    // Show list of pivots for selected topic
+    if (i == 4) {
+        arr = get_recent_pivots();
+        out = "";
+        for (i in arr) {
+            if (arr[i] != "") {
+                //console.log(arr[i]);
+                comment = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_comment");
+                url = localStorage.getItem("pivots_recentlyviewed_" + arr[i] + "_url");
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> <small>(" + url + ")</small></li>";
+            }
+            if (i > 20) break;
+        }
+        $("#discover_pivotlist").html("<ul>" + out + "</ul>");
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'Recently Viewed'); 
+
+    } else if (i == 0) {
+        $("#discover_pivotlist").html($("#_recent").html());
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'New Pivots'); 
+    }
+}
 
 
 
