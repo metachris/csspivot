@@ -67,6 +67,21 @@ $(document).ready(function() {
     $(".ui-dialog-titlebar").bind('keypress', "`", function (evt){ 
         if (evt.which == 96) { toggle_dialog(); return false; }
     });
+    $("#csspivot_css").keydown(function (e){ 
+        if (e.keyCode == 9) {
+            var myValue = "    ";
+            var startPos = this.selectionStart;
+            var endPos = this.selectionEnd;
+            var scrollTop = this.scrollTop;
+            this.value = this.value.substring(0, startPos) + myValue + this.value.substring(endPos,this.value.length);
+            this.focus();
+            this.selectionStart = startPos + myValue.length;
+            this.selectionEnd = startPos + myValue.length;
+            this.scrollTop = scrollTop;
+    
+            e.preventDefault();
+        }
+    });
     $(".ui-dialog-titlebar").click(function (evt){ 
         $("#csspivot_css").focus();
         return false
@@ -91,9 +106,6 @@ function toggle_dialog() {
     localStorage.setItem("pivots_recentlyviewed" + k + "_{{ id }}_url", "{{ url }}");
 {% endif %}
 
-function showcss() {
-    $("#csspivot_cssdialog").dialog("open");
-}
 
 </script>
 {% endblock %}
