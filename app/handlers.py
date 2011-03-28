@@ -79,7 +79,15 @@ def get_pivot_count(clear=False):
         #logging.info("return cached pivots")
         return cnt
 
-    cnt = Pivot.all().count()
+    cnt = 0
+    offset = 0
+    while True:
+        _cnt = len(Pivot.all().fetch(1000, offset))
+        if _cnt:
+            offset += 1000
+            cnt += _cnt
+        else:
+            break
     memcache.set("pivotcnt", cnt)
     return cnt
 
