@@ -37,10 +37,10 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 {% endblock %}
 
 {% block main %}
-<p>Add CSS styles to any website and share the result!</p>
+<p>Add CSS styles to any website, and share the result with a short link</p>
 
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
-<div style="padding-left:26px; margin-top:40px;">
+<div style="padding-left:26px; margin-top:60px;">
 <div id="pivot" style="background:url(/images/inputshape2.png) top left no-repeat; width:605px; height:80px;">
     <input type="text" name="url" id="url" style="margin-top:10px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="{% if invalid_url %}{{ invalid_url }}{% else %}http://{% endif %}" onfocus="this.value = this.value;" />
 </div>
@@ -52,7 +52,7 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 	</div>
     
 </div>
-    <input type="submit" value="open url" class="btn"/>
+    <input type="submit" value="Open URL"  class="btn"/>
 </div>
 </div>
 </form>
