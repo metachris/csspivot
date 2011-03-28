@@ -118,11 +118,13 @@ def get_heavy_pivots(clear=False):
     if pivots:
         #logging.info("return cached pivots")
         return pivots
-    pivots = []
 
+    pivots = []
     for pivot in Pivot.all().order("-date_submitted"):
         if pivot.styles_count > 2:
             pivots.append((pivot.styles_count, pivot))
+            if len(pivots) == 20:
+                break
 
     memcache.set("pivots_heavy2", pivots[:20])
     return pivots
