@@ -37,22 +37,48 @@ $(document).ready(function() {
     $(window).resize(function() { $("#iframe").height($("#container").height()-26); });
 
 	$(".csspivot_btn").button();
-    $("#csspivot_cssdialog").dialog({ autoOpen: {% if showdialog %}true{% else %}false{% endif %}, 
-        width: 500, height:350, resizable:false, buttons: [
-        { text: "Preview", click: function() { preview(true); }},
-        {% if not prefs %}
-            { text: "Update", disabled: true, title: "Please sign in to update your pivots", click: function() { }},
-        {% else %}
-            {% ifequal pivot.userprefs.key prefs.key %} { text: "Update", click: function() { savepivot(false); }},{% endifequal %}
-        {% endif %}
-        { text: "Save as new", click: function() { savepivot(true); }
+    $("#csspivot_cssdialog").dialog({ 
+        autoOpen: {% if showdialog %}true{% else %}false{% endif %},
+        zIndex: 3999, 
+        width: 500, 
+        height:350, 
+        resizable:false, 
+        buttons: [
+            { text: "Preview", click: function() { preview(true); }},
+            {% if not prefs %}
+                { text: "Update", disabled: true, title: "Please sign in to update your pivots", click: function() { }},
+            {% else %}
+                {% ifequal pivot.userprefs.key prefs.key %} { text: "Update", click: function() { savepivot(false); }},{% endifequal %}
+            {% endif %}
+            { text: "Save as new", click: function() { savepivot(true); }}
+        ], resize: function(event, ui) { 
+            h = document.getElementById("csspivot_cssdialog").style.height;
+            h = parseInt(h.replace("px", ""));
+            $("#csspivot_css").height(h-14);
         }
-    ], resize: function(event, ui) { 
-        h = document.getElementById("csspivot_cssdialog").style.height;
-        h = parseInt(h.replace("px", ""));
-        $("#csspivot_css").height(h-14);
-    }});
+    });
+    
+    $(window).bind('keypress', "`", function (evt){
+        if (evt.which == 96) { toggle_dialog(); return false; }
+    });
+    $(".ui-dialog").bind('keypress', "`", function (evt){ 
+        if (evt.which == 96) { toggle_dialog(); return false; }
+    });
+    $(".ui-dialog-titlebar").bind('keypress', "`", function (evt){ 
+        if (evt.which == 96) { toggle_dialog(); return false; }
+    });
+    $(".ui-dialog-titlebar").click(function (evt){ 
+        $("#csspivot_css").focus();
+        return false
+    });
 });
+
+function toggle_dialog() {
+    if ($("#csspivot_cssdialog").dialog("isOpen"))
+        $("#csspivot_cssdialog").dialog("close");
+    else
+        $("#csspivot_cssdialog").dialog("open");
+}
 
 {% if id %}
     k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
