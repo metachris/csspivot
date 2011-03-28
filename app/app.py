@@ -24,9 +24,10 @@ urls = [
     (r'/about', AboutView),
     (r'/proxy/([-\w]+)[/]?', ProxyView),
     (r'/', Main),
-    (r'/([-\w]+)[/]?', PivotView),
-    (r'/([-\w]+)[/]?/details', PivotDetails),
-    (r'/(.*)', UserView),
+    (r'/d/(.*)', Main),
+    (r'/([-\w]{5,6})[/]?', PivotView),
+    (r'/([-\w]{5,6})[/]?/details', PivotDetails),
+    #(r'/(.*)', UserView),
 ]
 
 application = webapp.WSGIApplication(urls, debug=True)

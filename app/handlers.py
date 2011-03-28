@@ -3,8 +3,8 @@ import os
 
 from google.appengine.api import users
 from google.appengine.api import urlfetch
-from google.appengine.api import memcache
 from google.appengine.api import mail
+from google.appengine.api import memcache
 
 from google.appengine.ext import db
 from google.appengine.ext import webapp
@@ -18,6 +18,8 @@ import urllib
 import traceback
 
 from models import *
+from tools import *
+import mc
 
 # Setup jinja templating
 #template_dirs = []
@@ -25,27 +27,6 @@ from models import *
 #env = Environment(loader=FileSystemLoader(template_dirs))
 
 tdir = os.path.join(os.path.dirname(__file__), 'templates/')
-
-
-def decode(var):
-    """Decode form input"""
-    if not var:
-        return var
-    return unicode(var, 'utf-8') if isinstance(var, str) else unicode(var)
-
-
-def randstr(n=5):
-    return ''.join(random.choice(string.ascii_letters + string.digits * 2) \
-            for x in range(n))
-
-
-def gen_modelhash(m, n=5):
-    if not m:
-        return None
-    while True:
-        id = randstr(n)
-        if not m.all().filter("id =", id).count():
-            return id
 
 
 # OpenID Login
@@ -69,67 +50,6 @@ class LogOut(webapp.RequestHandler):
         self.redirect(url)
 
 
-def get_pivot_count(clear=False):
-    if clear:
-        memcache.delete("pivotcnt")
-        return
-
-    cnt = memcache.get("pivotcnt")
-    if cnt:
-        #logging.info("return cached pivots")
-        return cnt
-
-    cnt = 0
-    offset = 0
-    while True:
-        _cnt = len(Pivot.all().fetch(1000, offset))
-        if _cnt:
-            offset += 1000
-            cnt += _cnt
-        else:
-            break
-    memcache.set("pivotcnt", cnt)
-    return cnt
-
-
-def get_recent_pivots(clear=False):
-    if clear:
-        memcache.delete("pivots_recent")
-        return
-
-    pivots = memcache.get("pivots_recent")
-    if pivots:
-        #logging.info("return cached pivots")
-        return pivots
-
-    pivots = []
-    for pivot in Pivot.all().order("-date_submitted").fetch(20):
-        pivots.append(pivot)
-    memcache.set("pivots_recent", pivots)
-    return pivots
-
-
-def get_heavy_pivots(clear=False):
-    if clear:
-        memcache.delete("pivots_heavy2")
-        return
-
-    pivots = memcache.get("pivots_heavy2")
-    if pivots:
-        #logging.info("return cached pivots")
-        return pivots
-
-    pivots = []
-    for pivot in Pivot.all().order("-date_submitted"):
-        if pivot.styles_count > 2:
-            pivots.append((pivot.styles_count, pivot))
-            if len(pivots) == 20:
-                break
-
-    memcache.set("pivots_heavy2", pivots[:20])
-    return pivots
-
-
 # Custom sites
 class Main(webapp.RequestHandler):
     def head(self, screen_name=None):
@@ -140,14 +60,14 @@ class Main(webapp.RequestHandler):
         prefs = InternalUser.from_user(user)
         invalid_url = decode(self.request.get('u'))
 
-        recent = get_recent_pivots()[:10]
-        heavy = get_heavy_pivots()[:10]
+        recent = mc.get_recent_pivots()[:10]
+        heavy = mc.get_heavy_pivots()[:10]
 
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
                 'recent': recent, 'heavy': heavy, \
-                'pivot_count': get_pivot_count()}))
+                'pivot_count': mc.get_pivot_count()}))
 
     def post(self):
         user = users.get_current_user()
@@ -214,9 +134,9 @@ class Main(webapp.RequestHandler):
         p.put()
 
         # Clear Cache
-        get_recent_pivots(clear=True)
-        get_heavy_pivots(clear=True)
-        get_pivot_count(clear=True)
+        mc.get_recent_pivots(clear=True)
+        mc.get_heavy_pivots(clear=True)
+        mc.get_pivot_count(clear=True)
 
         self.redirect("/%s" % p.id)
 
