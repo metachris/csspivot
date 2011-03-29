@@ -104,3 +104,18 @@ def pivots_for_domain(domain_base, offset=0, clear=False):
     memcache.set("pivots-domain_%s-%s" % (offset, domain_base), pivots)
     logging.info("cached %s projects for %s" % (len(pivots), domain_base))
     return pivots
+
+
+def get_topdomains(clear=False):
+    if clear:
+        memcache.delete("domains-top")
+        return
+
+    domains = memcache.get("domains-top")
+    if domains:
+        return domains
+
+    domains = Domain.all().order("-pivot_count").fetch(70)
+    memcache.set("domains-top", domains)
+    logging.info("cached domains")
+    return domains

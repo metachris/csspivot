@@ -104,14 +104,15 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
             <li><a href="javascript:showpivots(0)">New pivots</a></li>
             <li><a href="javascript:showpivots(2)">New pivots with several changes</a></li>
             <li><a href="javascript:showpivots(4)">Recently viewed</a></li>
-            <li><a href="javascript:showpivots(1)">Some examples</a></li>
+            <li><a href="javascript:showpivots(1)">Examples</a></li>
             <!--<li><a href="javascript:showpivots(1)">Pivots by domain</a></li>
             <li><a href="javascript:showpivots(3)">Most viewed</a></li>
             -->
         </ul>
         <hr>
         <ul>
-            <li>Search for a domain</li>
+            <li><a href="javascript:showpivots(20)">Top domains</a></li>
+            <!-- <li>Search for a domain</li> -->
         </ul>
     </div>
 </div>
@@ -122,8 +123,9 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 </div>
 
 
-<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} change{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
-<div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}">{{ pivot.id }}</a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}</small>{% endfor %}</div>
+<div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code></a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} change{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
+<div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code></a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}</small>{% endfor %}</div>
+<div id="_topdomains" style="display:none;"><ul>{% for domain in topdomains %}<li><a href="/d/{{ domain.url_domain_base }}">{{ domain.url_domain_base }}</a>: {{ domain.pivot_count }} pivot{{ domain.pivot_count|pluralize }}</small>{% endfor %}</div>
 <div id="_examples" style="display:none;"><ul>
 <li><a href="http://www.csspivot.com/GMKAW">Reddit Extended</a></li>
 <li><a href="http://www.csspivot.com/0nF1j">Dribble Variation</a></li>

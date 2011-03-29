@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block head %}
-  <title>CSS Pivot - {{ url }}</title>
+  <title>CSS Pivot {{ id }}: {{ url|remove:"http://"|strip:"/" }}</title>
   <meta name="description" content="CSS pivot for {{ url }}: {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}">
 {% endblock %}
   

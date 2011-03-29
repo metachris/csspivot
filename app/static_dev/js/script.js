@@ -80,7 +80,7 @@ function showpivots(i) {
                 cnt_txt = "";
                 if (cnt) { if (cnt > 0) cnt_txt = " &middot; " + cnt + " change"; if (cnt > 1) cnt_txt += "s"; }
                 url = localStorage.getItem("pivots_recentlyviewed" + k + "_" + arr[i] + "_url");
-                out += "<li><a href='/" + arr[i] + "' title='" + url + "'>" + arr[i] + "</a> &middot; <small>" + url + cnt_txt + "</small></li>";
+                out += "<li><a href='/" + arr[i] + "' title='" + url + "'><code>" + arr[i] + "</code></a> &middot; <small>" + url + cnt_txt + "</small></li>";
             }
             if (i > 20) break;
         }
@@ -102,6 +102,11 @@ function showpivots(i) {
         $("#discover_pivotlist").html($("#_heavy").html());
         $("#dialog_pivots").dialog("open");
         $("#dialog_pivots").dialog("option", "title", 'Heavy Pivots'); 
+
+    } else if (i == 20) {
+        $("#discover_pivotlist").html($("#_topdomains").html());
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'Top Domains'); 
     }
 }
 

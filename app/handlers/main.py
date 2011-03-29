@@ -56,11 +56,13 @@ class Main(webapp.RequestHandler):
 
         recent = mc.get_recent_pivots()[:10]
         heavy = mc.get_heavy_pivots()[:10]
+        topdomains = mc.get_topdomains()[:10]
 
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
                 'recent': recent, 'heavy': heavy, \
+                "topdomains": topdomains[:20], \
                 'pivot_count': mc.get_pivot_count()}))
 
     def post(self):
@@ -154,6 +156,8 @@ class Main(webapp.RequestHandler):
         mc.get_recent_pivots(clear=True)
         mc.get_heavy_pivots(clear=True)
         mc.get_pivot_count(clear=True)
+        mc.pivots_for_domain(p.domain, clear=True)
+        mc.get_topdomains(clear=True)
 
         self.redirect("/%s" % p.id)
 
