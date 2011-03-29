@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+	<script> 
+        $(document).ready(function() {
+        });
+	</script>
+{% endblock %}
+
+{% block main %}
+<h1>{{ domain_base }}</h1>
+<small>{{ count }} pivots</small>
+
+<div style="margin:50px 0px 150px 120px;" id="domain_pivots">
+    {% for pivot in pivots %}
+        {% if pivot.styles_count %}
+            <div class="pivot"><a href="/{{ pivot.id }}"><code>{{ pivot.id }}</code></a> &middot; 
+            {{ pivot.styles_count }} <small> &middot; change{{ pivot.styles_count|pluralize }}
+            {% if pivot.userprefs %}&middot; {{ pivot.userprefs.nickname }}{% endif %}</small></div>
+        {% endif %}
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
