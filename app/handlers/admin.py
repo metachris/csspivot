@@ -22,5 +22,14 @@ tdir = os.path.join(os.path.dirname(__file__), '../templates/')
 
 class AdminView(webapp.RequestHandler):
     def get(self):
-        u = decode(self.request.get('u'))
+        a = decode(self.request.get('a'))
+        if a:
+            # update projects -- add a domain
+            start = int(a) * 500
+
+        b = decode(self.request.get('b'))
+        if b:
+            # update pivots -- add a domain
+            start = int(b) * 500
+
         self.response.out.write(template.render(tdir + "admin.html", {}))

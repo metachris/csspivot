@@ -79,6 +79,9 @@ class Domain(db.Model):
 
     date_submitted = db.DateTimeProperty(auto_now_add=True)
 
+    project_count = db.IntegerProperty(default=1)
+    pivot_count = db.IntegerProperty(default=1)
+
 
 class Project(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)

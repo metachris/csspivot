@@ -106,21 +106,32 @@ class Main(webapp.RequestHandler):
                 if parent_pivot:
                     project = parent_pivot.project
 
+            d_base, d_full = get_domains(url)
+
+            domain_created = False
+            domain = Domain.all().filter("url_domain_base =", d_base).get()
+            if not domain:
+                domain = Domain(url=url, url_domain_base=d_base, \
+                        url_domain_full=d_full)
+                domain.put()
+                domain_created = True
+
             if not parent_pivot:
-                # create a new project
+                # create a new project. first check if domain exists
                 project = Project(userprefs=prefs, id=gen_modelhash(Project), \
                         title=title, url=url, rand=random.random())
 
-                # d1=domain without subdomain, d2=with subdomain
-                d1, d2 = get_domains(url)
-                project.url_domain_base = d1
-                project.url_domain_full = d2
+                domain.project_count += 1
+                project.domain = domain
+                project.url_domain_base = d_base
+                project.url_domain_full = d_full
                 project.put()
 
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
                     rand=random.random())
 
+            p.domain = domain
             p.url = url
             p.url_domain_base = project.url_domain_base
             p.url_domain_full = project.url_domain_full
@@ -128,6 +139,11 @@ class Main(webapp.RequestHandler):
             if parent_pivot:
                 p.parent_pivot = parent_pivot
                 logging.info("parent pivot set")
+
+            if not domain_created:
+                # to not save domain twice within very short time when created
+                domain.pivot_count += 1
+                domain.put()
 
         if p.css:
             p.styles_count = p.css.count(":")
