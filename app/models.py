@@ -78,7 +78,10 @@ class Project(db.Model):
 
     id = db.StringProperty(required=True)
     title = db.StringProperty()
-    url = db.StringProperty(required=True)
+    url = db.StringProperty(required=True)  # eg. www.google.com/about
+    url_domain_full = db.StringProperty()   # eg. www.google.com
+    url_domain_base = db.StringProperty()   # eg. google.com
+
     date_submitted = db.DateTimeProperty(auto_now_add=True)
 
 

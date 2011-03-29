@@ -64,3 +64,24 @@ def get_heavy_pivots(clear=False):
 
     memcache.set("pivots_heavy2", pivots[:20])
     return pivots
+
+
+def pivots_for_domain(domain, clear=False):
+    if clear:
+        memcache.delete("pivots-domain_%s" % domain)
+        return
+
+    pivots = memcache.get("pivots-domain_%s" % domain)
+    if pivots:
+        logging.info("return cached pivots")
+        return pivots
+
+    pivots = []
+    for pivot in db.Query(Pivot).filter(domain, "IN url"):
+        pivots.append((pivot.styles_count, pivot))
+        if len(pivots) == 20:
+            break
+
+    memcache.set("pivots-domain_%s" % domain, pivots[:20])
+    logging.info("%s pivots" % len(pivots))
+    return pivots

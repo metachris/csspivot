@@ -13,7 +13,6 @@ from google.appengine.ext.webapp import template
 import re
 import hashlib
 import random
-import string
 import urllib
 import traceback
 
@@ -118,6 +117,11 @@ class Main(webapp.RequestHandler):
                 # create a new project
                 project = Project(userprefs=prefs, id=gen_modelhash(Project), \
                         title=title, url=url, rand=random.random())
+
+                # d1=domain without subdomain, d2=with subdomain
+                d1, d2 = get_domains(url)
+                project.url_domain_base = d1
+                project.url_domain_full = d2
                 project.put()
 
             p = Pivot(userprefs=prefs, project=project, css=css, \
@@ -336,3 +340,19 @@ class AboutView(webapp.RequestHandler):
             message.subject = "CSS Pivot Feedback"
             message.body = "Feedback from '%s':\n\n%s" % (sender, msg)
             message.send()
+
+
+class DomainView(webapp.RequestHandler):
+    def get(self, domain):
+        # feedback form submit
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        domain_base, domain_full = get_domains(domain)
+        logging.info("base: %s, full: %s" % (domain_base, domain_full))
+
+        #if not base or len(base) < 5:
+        #    self.error(404)
+        #    return
+
+        #pivots = mc.pivots_for_domain(base)

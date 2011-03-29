@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+import urllib
+import logging
+import random
+import string
+
 from os import environ
 
 
@@ -31,3 +37,19 @@ def gen_modelhash(m, n=5):
         id = randstr(n)
         if not m.all().filter("id =", id).count():
             return id
+
+
+def get_domains(url):
+    base = urllib.unquote(url)
+    if "://" in base:
+        base = base[base.index("://") + 3:]
+    if "/" in base:
+        base = base[:base.index("/")]
+    base = base.split(".")
+    logging.info(base)
+    if len(base) < 3:
+        # has no subdomain
+        return ".".join(base), ".".join(base)
+    else:
+        # has subdomain
+        return ".".join(base[-2:]), ".".join(base)
