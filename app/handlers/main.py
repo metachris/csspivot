@@ -111,7 +111,7 @@ class Main(webapp.RequestHandler):
             domain_created = False
             domain = Domain.all().filter("url_domain_base =", d_base).get()
             if not domain:
-                domain = Domain(url=url, url_domain_base=d_base, \
+                domain = Domain(url_domain_base=d_base, \
                         url_domain_full=d_full)
                 domain.put()
                 domain_created = True

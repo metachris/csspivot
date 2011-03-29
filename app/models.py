@@ -73,7 +73,6 @@ class InternalUser(db.Model):
 
 
 class Domain(db.Model):
-    url = db.StringProperty(required=True)  # eg. www.google.com/about
     url_domain_full = db.StringProperty()   # eg. www.google.com
     url_domain_base = db.StringProperty()   # eg. google.com
 
