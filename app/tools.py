@@ -25,8 +25,8 @@ def decode(var):
 
 
 def randstr(n=5):
-    return ''.join(random.choice(string.ascii_letters + string.digits * 2) \
-            for x in range(n))
+    return ''.join(random.choice(string.ascii_letters + \
+            string.ascii_lowercase + string.digits * 3) for x in range(n))
 
 
 def gen_modelhash(m, n=5):
