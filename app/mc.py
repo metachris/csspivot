@@ -66,22 +66,41 @@ def get_heavy_pivots(clear=False):
     return pivots
 
 
-def pivots_for_domain(domain, clear=False):
+def projects_for_domain(domain_base, offset=0, clear=False):
+    # returns 100 projects, offset starts at 0
     if clear:
-        memcache.delete("pivots-domain_%s" % domain)
+        memcache.delete("projects-domain_%s-%s" % (offset, domain_base))
         return
 
-    pivots = memcache.get("pivots-domain_%s" % domain)
+    projects = memcache.get("projects-domain_%s-%s" % (offset, domain_base))
+    if projects:
+        return projects
+
+    projects = []
+    for project in Project.all().filter("url_domain_base =", domain_base) \
+            .fetch(100, offset * 100):
+        projects.append(project)
+
+    memcache.set("projects-domain_%s-%s" % (offset, domain_base), projects)
+    logging.info("cached %s projects for %s" % (len(projects), domain_base))
+    return projects
+
+
+def pivots_for_domain(domain_base, offset=0, clear=False):
+    # returns 100 pivots, offset starts at 0
+    if clear:
+        memcache.delete("pivots-domain_%s-%s" % (offset, domain_base))
+        return
+
+    pivots = memcache.get("pivots-domain_%s-%s" % (offset, domain_base))
     if pivots:
-        logging.info("return cached pivots")
         return pivots
 
     pivots = []
-    for pivot in db.Query(Pivot).filter(domain, "IN url"):
-        pivots.append((pivot.styles_count, pivot))
-        if len(pivots) == 20:
-            break
+    for pivot in Pivot.all().filter("url_domain_base =", domain_base) \
+            .order("-styles_count").fetch(100, offset * 100):
+        pivots.append(pivot)
 
-    memcache.set("pivots-domain_%s" % domain, pivots[:20])
-    logging.info("%s pivots" % len(pivots))
+    memcache.set("pivots-domain_%s-%s" % (offset, domain_base), pivots)
+    logging.info("cached %s projects for %s" % (len(pivots), domain_base))
     return pivots

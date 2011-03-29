@@ -351,4 +351,11 @@ class DomainView(webapp.RequestHandler):
             self.error(404)
             return
 
+        #projects = mc.projects_for_domain(domain_base)
         pivots = mc.pivots_for_domain(domain_base)
+        logging.info("--> %s pivots" % len(pivots))
+
+        webapp.template.register_template_library('common.templateaddons')
+        self.response.out.write(template.render(tdir + "domain.html", \
+                {"prefs": prefs, 'pivots': pivots, 'count': len(pivots),\
+                'domain_base': domain_base}))

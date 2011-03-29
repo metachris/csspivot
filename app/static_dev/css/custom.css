@@ -97,3 +97,10 @@ p { margin-bottom:10px; }
 	top:1px;
 }    
 */
+
+
+#domain_pivots .pivot {
+    float:left;
+    width:240px;
+    text-align:left;
+}
