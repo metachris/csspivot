@@ -101,14 +101,12 @@ class Main(webapp.RequestHandler):
             # Create a new pivot. Reference parent pivot+project if exits
             parent_pivot = None
             if orig:
-                # pivot has a parent. find that and reference them
+                # pivot has a parent. find that and reference it
                 parent_pivot = Pivot.all().filter("id =", orig).get()
+                if parent_pivot:
+                    project = parent_pivot.project
 
-            if parent_pivot:
-                # use existing project
-                project = parent_pivot.project
-
-            else:
+            if not parent_pivot:
                 # create a new project
                 project = Project(userprefs=prefs, id=gen_modelhash(Project), \
                         title=title, url=url, rand=random.random())
@@ -122,6 +120,10 @@ class Main(webapp.RequestHandler):
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
                     rand=random.random())
+
+            p.url = url
+            p.url_domain_base = project.url_domain_base
+            p.url_domain_full = project.url_domain_full
 
             if parent_pivot:
                 p.parent_pivot = parent_pivot

@@ -99,3 +99,7 @@ class Pivot(db.Model):
 
     # number of : characters (single styles)
     styles_count = db.IntegerProperty(default=0)
+
+    url = db.StringProperty()  # eg. www.google.com/about
+    url_domain_full = db.StringProperty()  # eg. www.google.com
+    url_domain_base = db.StringProperty()  # eg. google.com
