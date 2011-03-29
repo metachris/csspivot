@@ -46,7 +46,7 @@ def get_domains(url):
     if "/" in base:
         base = base[:base.index("/")]
     base = base.split(".")
-    logging.info(base)
+    #logging.info(base)
     if len(base) < 3:
         # has no subdomain
         return ".".join(base), ".".join(base)

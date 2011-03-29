@@ -20,12 +20,7 @@ from models import *
 from tools import *
 import mc
 
-# Setup jinja templating
-#template_dirs = []
-#template_dirs.append(os.path.join(os.path.dirname(__file__), 'templates'))
-#env = Environment(loader=FileSystemLoader(template_dirs))
-
-tdir = os.path.join(os.path.dirname(__file__), 'templates/')
+tdir = os.path.join(os.path.dirname(__file__), '../templates/')
 
 
 # OpenID Login
