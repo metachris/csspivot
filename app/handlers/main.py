@@ -360,6 +360,9 @@ class AboutView(webapp.RequestHandler):
 
 
 class DomainView(webapp.RequestHandler):
+    def head(self, screen_name=None):
+        return
+
     def get(self, domain):
         # feedback form submit
         user = users.get_current_user()

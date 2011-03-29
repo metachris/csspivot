@@ -18,7 +18,7 @@
 function savepivot(new_file) {
     css = $("#csspivot_css").val();     
     if (css.length == 0) { alert("Please enter a style before saving"); return ; }
-    if (css.indexOf("{") == -1 || css.indexOf("}") == -1) {
+    if (css.indexOf("{") == -1 || css.indexOf("}") == -1 || css.indexOf(":") == -1) {
         alert("This doesn't look like valid css. Here is an example css: \n\n body { background:red; }");
         return ;
     }

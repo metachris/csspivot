@@ -7,15 +7,19 @@
 	</script>
 {% endblock %}
 
+{% block head %}
+  <title>CSS pivots for {{ domain_base }}</title>
+  <meta name="description" content="{{ count }} CSS pivots for {{ domain_base }}">
+{% endblock %}
+
 {% block main %}
 <h1>{{ domain_base }}</h1>
-<small>{{ count }} pivots</small>
 
 <div style="margin:50px 0px 150px 120px;" id="domain_pivots">
     {% for pivot in pivots %}
         {% if pivot.styles_count %}
-            <div class="pivot"><a href="/{{ pivot.id }}"><code>{{ pivot.id }}</code></a> &middot; 
-            {{ pivot.styles_count }} <small> &middot; change{{ pivot.styles_count|pluralize }}
+            <div class="pivot" title="{{ pivot.url_domain_full }}"><a href="/{{ pivot.id }}"><code>{{ pivot.id }}</code></a> &middot; 
+            {{ pivot.styles_count }} <small> change{{ pivot.styles_count|pluralize }}
             {% if pivot.userprefs %}&middot; {{ pivot.userprefs.nickname }}{% endif %}</small></div>
         {% endif %}
     {% endfor %}
