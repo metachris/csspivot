@@ -72,8 +72,17 @@ class InternalUser(db.Model):
         return prefs
 
 
+class Domain(db.Model):
+    url = db.StringProperty(required=True)  # eg. www.google.com/about
+    url_domain_full = db.StringProperty()   # eg. www.google.com
+    url_domain_base = db.StringProperty()   # eg. google.com
+
+    date_submitted = db.DateTimeProperty(auto_now_add=True)
+
+
 class Project(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
+    domain = db.ReferenceProperty(Domain)
     rand = db.FloatProperty()
 
     id = db.StringProperty(required=True)
@@ -87,19 +96,21 @@ class Project(db.Model):
 
 class Pivot(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
-    rand = db.FloatProperty()
     project = db.ReferenceProperty(Project, required=True)
+    domain = db.ReferenceProperty(Domain)
     parent_pivot = db.SelfReferenceProperty()
 
-    id = db.StringProperty(required=True)
     comment = db.StringProperty()
     css = db.TextProperty()
+
+    id = db.StringProperty(required=True)
+    rand = db.FloatProperty()
     date_submitted = db.DateTimeProperty(auto_now_add=True)
     views = db.IntegerProperty(default=0)
-
-    # number of : characters (single styles)
-    styles_count = db.IntegerProperty(default=0)
 
     url = db.StringProperty()  # eg. www.google.com/about
     url_domain_full = db.StringProperty()  # eg. www.google.com
     url_domain_base = db.StringProperty()  # eg. google.com
+
+    # number of : characters (single styles)
+    styles_count = db.IntegerProperty(default=0)
