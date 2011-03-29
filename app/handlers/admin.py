@@ -23,20 +23,4 @@ tdir = os.path.join(os.path.dirname(__file__), '../templates/')
 class AdminView(webapp.RequestHandler):
     def get(self):
         u = decode(self.request.get('u'))
-
-        if u:
-            start = int(u) * 500
-            logging.info("start updating @ %s" % start)
-            projects = Project.all().order("id").fetch(500, start)
-            cnt = 0
-            for p in projects:
-                p.url_domain_base, p.url_domain_full = get_domains(p.url)
-                p.put()
-                cnt += 1
-
-            logging.info("- %s projects updated" % cnt)
-            if not cnt:
-                self.error(404)
-                return
-
         self.response.out.write(template.render(tdir + "admin.html", {}))

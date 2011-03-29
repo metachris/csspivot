@@ -157,7 +157,7 @@ class PivotView(webapp.RequestHandler):
 
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "pivot.html", \
-                {"prefs": prefs, 'url': pivot.project.url, 'key': key, \
+                {"prefs": prefs, 'url': pivot.url, 'key': key, \
                 'css': pivot.css, 'id': pivot.id, 'pivot': pivot}))
 
 
@@ -347,9 +347,8 @@ class DomainView(webapp.RequestHandler):
 
         domain_base, domain_full = get_domains(domain)
         logging.info("base: %s, full: %s" % (domain_base, domain_full))
+        if not domain_base or len(domain_base) < 5:
+            self.error(404)
+            return
 
-        #if not base or len(base) < 5:
-        #    self.error(404)
-        #    return
-
-        #pivots = mc.pivots_for_domain(base)
+        pivots = mc.pivots_for_domain(domain_base)
