@@ -23,7 +23,7 @@ a, a:active, a:visited {
     text-decoration:none;
 }
 a:hover { 
-    color: #0081a5; 
+    color: #036; 
     text-decoration:underline;
 }
 
@@ -35,8 +35,6 @@ a:hover {
 
 #header #logo {
     float:left;
-    margin:70px 0px 36px 0px; 
-    text-align:center;
 }
 
 #header h1 {
