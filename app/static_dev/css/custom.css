@@ -104,3 +104,40 @@ p { margin-bottom:10px; }
     width:240px;
     text-align:left;
 }
+
+
+#dialog_pivots li:hover { background:#fafade; }
+
+
+#more {
+    width:172px;
+    text-align:left;
+    position:absolute;
+    left:200px;
+    border:1px solid lightgray;
+    border-bottom:0px solid white;
+    background:#fafafa;
+    margin-top:-1px;
+    font-size:11px;
+    color:#888;
+}
+
+#more p {
+    margin-bottom:8px;
+}
+
+#more .navlink {
+    display:block;
+    padding: 6px 8px;
+    border-bottom:1px solid lightgray;
+    margin-bottom:0px;
+}
+
+#more a.navlink:hover {
+    background:#fafade;
+    text-decoration:none;
+}
+
+#more hr {
+    margin:8px 0px;
+}

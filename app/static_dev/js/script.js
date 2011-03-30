@@ -148,5 +148,33 @@ function feedback_submit() {
 
 
 
+var is_more_shown = false;
+function toggle_more() {
+    if (is_more_shown)
+        $("#more").hide();
+    else
+        $("#more").show();
+    is_more_shown = !is_more_shown;
+}
 
 
+var is_orig_shown = false;
+var is_orig_loaded = false;
+function pivot_toggleorig() {    
+    if (is_orig_shown) {
+        $("#iframe_orig").hide();
+        $("#iframe").show();
+        $("#txt_showorig").html("Show original website");
+    } else {
+        if (!is_orig_loaded) {
+            document.getElementById("iframe_orig").src = url;
+            is_orig_loaded = true;
+        }        
+        $("#iframe_orig").show();
+        $("#iframe").hide();
+        $("#txt_showorig").html("Show custom variation");
+    }
+    is_orig_shown = !is_orig_shown;
+    //is_more_shown = true;
+    //toggle_more();
+}

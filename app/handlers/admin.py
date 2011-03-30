@@ -22,5 +22,12 @@ tdir = os.path.join(os.path.dirname(__file__), '../templates/')
 
 class AdminView(webapp.RequestHandler):
     def get(self):
-        a = decode(self.request.get('a'))
+        b2 = decode(self.request.get('b2'))
+        if b2:
+            # now set the project count
+            for domain in Domain.all():
+                domain.pivot_count = Pivot.all().filter("styles_count >", 0).filter("domain =", domain).count()
+                domain.put()
+                logging.info("- %s: %s pivot" % (domain.url_domain_base, domain.pivot_count))
+
         self.response.out.write(template.render(tdir + "admin.html", {}))
