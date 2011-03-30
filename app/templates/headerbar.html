@@ -27,16 +27,17 @@
 
 <div id='csspivot' style="">
     <div style="float:right; margin-top:-1px;">
-    <div style="float:left; padding-top:1px;"><small>
-        {% if prefs %}
-        <a href="/account">{{ prefs.nickname }}</a>
-        {% else %}
-        <a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a> 
-        {% endif %}
-    </small> &middot; <small>share via&nbsp; </small></div>
-    {% if id %}<a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share this pivot on Facebook" target="_blank">{% endif %}<img src="/images/fb{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
-    {% if id %}<a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share this pivot on Twitter" target="_blank">{% endif %}<img src="/images/twitter{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
-    {% if id %}<a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share this pivot on Forrst">{% endif %}<img src="/images/forrst_green{% if not id %}_gray{% endif %}.png" width="16" height="16"/></a>
+        <div style="float:left; padding-top:1px;"><small>
+            {% if prefs %}
+                <a href="/account">{{ prefs.nickname }}</a>
+            {% else %}
+                <a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a> 
+            {% endif %}
+            </small> &middot; <small>share via&nbsp; </small>
+        </div>
+        {% if id %}<a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share this pivot on Facebook" target="_blank">{% endif %}<img src="/images/fb{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
+        {% if id %}<a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share this pivot on Twitter" target="_blank">{% endif %}<img src="/images/twitter{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
+        {% if id %}<a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share this pivot on Forrst">{% endif %}<img src="/images/forrst_green{% if not id %}_gray{% endif %}.png" width="16" height="16"/></a>
     </div>
     <div style="">
         <a href=" /"><b>CSS Pivot</b></a> 

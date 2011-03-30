@@ -57,9 +57,13 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 </div>
 </form>
 
+<div style="margin-top:80px;"></div>
 
 
-<div style="margin-top:70px; margin-bottom:74px">
+<hr style="width:40%; margin:auto;">
+
+
+<div style="margin-top:40px; margin-bottom:40px">
     {% if prefs %}
     <a href="/account" title="That's you!">{{ prefs.nickname }}</a>
     <div style="margin-top:20px;"><a href="javascript:discover()" class="btn">Discover Pivots</a></div>
@@ -74,11 +78,8 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 <hr style="width:40%; margin:auto;">
 
-<div style="margin:10px 0px; font-size:82%; color:#AAA;">{{ pivot_count }} pivots and counting</div>
 
-<hr style="width:40%; margin:auto;">
-
-<div style="width:150px; margin:auto; margin-top:20px; margin-bottom:20px; text-align:center;">
+<div style="width:150px; margin:auto; margin-top:40px; margin-bottom:40px; text-align:center;">
     <div style="float:left;">
         <a href="http://twitter.com/share" class="twitter-share-button" data-counturl="http://www.csspivot.com" data-url="http://www.csspivot.com"  data-text="Modify and share the CSS of any website:" data-count="vertical" data-via="csspivot">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
@@ -90,13 +91,12 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 <hr style="width:40%; margin:auto;">
 
-<div style="margin-top:10px; font-size:92%; text-align:center;">
-<a href="javascript:feedback()">Feedback</a> &middot; <a href="http://twofishcreative.com/michael/blog/2011/03/28/css-pivot-bookmarklet" target="_blank" rel="nofollow">Bookmarklet</a> &middot; <a target="_blank" href="http://twitter.com/csspivot">Twitter</a>
-<!--
-<a href="javascript:feedback()"><img src="/images/twitter_us.png" /></a>
+<!-- <div style="margin:10px 0px; font-size:82%; color:#AAA;">{{ pivot_count }} pivots and counting</div> 
 -->
-</div>
 
+<div style="margin-top:40px; font-size:92%; text-align:center;">
+<a href="javascript:feedback()">Feedback</a> &middot; <a href="http://twofishcreative.com/michael/blog/2011/03/28/css-pivot-bookmarklet" target="_blank" rel="nofollow">Bookmarklet</a> &middot; <a target="_blank" href="http://twitter.com/csspivot" title="@csspivot on Twitter">@csspivot</a>
+</div>
 
 <div id="dialog_discover" title="Discover Pivots" style="display:none;">
     <div id="index" style="margin:10px 0px;">
