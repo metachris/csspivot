@@ -14,7 +14,7 @@
   
 {% block scripts %}
 <script type="text/javascript">
-
+var url = "{{ url }}";
 function savepivot(new_file) {
     css = $("#csspivot_css").val();     
     if (css.length == 0) { alert("Please enter a style before saving"); return ; }
@@ -34,9 +34,15 @@ function savepivot(new_file) {
 
 $(document).ready(function() {
     $("#iframe").height($("#container").height()-26);
-    $(window).resize(function() { $("#iframe").height($("#container").height()-26); });
+    $("#iframe_orig").height($("#container").height()-26); 
+    $(window).resize(function() { 
+        $("#iframe").height($("#container").height()-26); 
+        $("#iframe_orig").height($("#container").height()-26); 
+    });
 
 	$(".csspivot_btn").button();
+	$(".btn").button();
+    $("#dialog_feedback").dialog({ autoOpen: false, width:450 });
     $("#csspivot_cssdialog").dialog({ 
         autoOpen: {% if showdialog %}true{% else %}false{% endif %},
         zIndex: 3999, 
@@ -114,6 +120,7 @@ function toggle_dialog() {
 {% include "headerbar.html" %}
 
 <iframe src="/proxy?url={{ url }}&key={{ key }}" width="100%" height="100%" frameborder="0" noresize="0" name="proxy" id="iframe" scrolling="auto"></iframe>
+<iframe src="" width="100%" height="100%" frameborder="0" noresize="0" name="proxy" id="iframe_orig" style="display:none;" scrolling="auto"></iframe>
 
 <div id="csspivot_cssdialog" title="Custom Styles <small style='margin-left:80px; font-weight:normal;' title='add !important to overwrite all other definitions'><code>!important</code> is your friend</small>">
     <form action="/" method="post" id="csspivot_form">
@@ -124,5 +131,6 @@ function toggle_dialog() {
         <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
     </form>
 </div>
+
 
 {% endblock %}
