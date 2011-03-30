@@ -41,6 +41,8 @@ $(document).ready(function() {
     });
 
 	$(".csspivot_btn").button();
+	$(".btn").button();
+    $("#dialog_feedback").dialog({ autoOpen: false, width:450 });
     $("#csspivot_cssdialog").dialog({ 
         autoOpen: {% if showdialog %}true{% else %}false{% endif %},
         zIndex: 3999, 
@@ -129,5 +131,6 @@ function toggle_dialog() {
         <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
     </form>
 </div>
+
 
 {% endblock %}
