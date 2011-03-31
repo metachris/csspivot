@@ -37,6 +37,10 @@ function preview(showdialog) {
 
     document.body.appendChild(form);
     form.submit();
+
+    // if orig is shown, switch to preview
+    if (is_orig_shown)
+        pivot_toggleorig();
     
     /*
     if (!previewWindow || previewWindow.closed) {
@@ -47,7 +51,6 @@ function preview(showdialog) {
         previewWindow.focus();
     }
     */
-    
 }
 
 
