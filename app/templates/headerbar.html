@@ -1,34 +1,34 @@
 <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 
-<div id='csspivot' style="">
-    <div style="float:right; margin-top:-1px;">
-    <div style="float:left; padding-top:1px;"><small>
-        {% if prefs %}
-        <a href="/account">{{ prefs.nickname }}</a>
-        {% else %}
-        <a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a> 
-        {% endif %}
-    </small> &middot; <small>share via&nbsp; </small></div>
-    {% if id %}<a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share this pivot on Facebook" target="_blank">{% endif %}<img src="/images/fb{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
-    {% if id %}<a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share this pivot on Twitter" target="_blank">{% endif %}<img src="/images/twitter{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
-    {% if id %}<a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share this pivot on Forrst">{% endif %}<img src="/images/forrst_green{% if not id %}_gray{% endif %}.png" width="16" height="16"/></a>
+<div id="csspivot" style="" role="navigation">
+	<div class="menu-header">
+        <div style="float:right;">
+        <div style="float:left; border-left: 1px solid #b1b1b1;">
+            {% if prefs %}
+            <a href="/account">{{ prefs.nickname }}</a>
+            {% else %}
+            <a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a> 
+            {% endif %}
+         share via&nbsp; </small></div>
+        {% if id %}<a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share this pivot on Facebook" target="_blank">{% endif %}<img src="/images/fb{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
+        {% if id %}<a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share this pivot on Twitter" target="_blank">{% endif %}<img src="/images/twitter{% if not id %}_gray{% endif %}.png" width="16" height="16" /></a>
+        {% if id %}<a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share this pivot on Forrst">{% endif %}<img src="/images/forrst_green{% if not id %}_gray{% endif %}.png" width="16" height="16"/></a>
+        </div>
+        
+        <ul class="menu">
+            <li><a href=" /"><b>CSS Pivot</b></a></li>
+            {% if id %}<li><a href=" /{{ id }}"><b>{{ id }}</b></a></li>{% endif %}
+            <li><a href="javascript:toggle_dialog()">view custom css</a></li>
+            <li><a href="#">more</a>
+                <ul>
+                    <li><a class="navlink" href="javascript:pivot_toggleorig()" id="txt_showorig">Show original website</a></li>
+                    <li><a class="navlink" href="/d/{{ pivot.domain.url_domain_base }}">{{ pivot.domain.pivot_count }} pivots for this domain</a></li>
+                    <li><a class="navlink" href="#">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}-{% endif %}</a></li>
+                    <li><a class="navlink" href="javascript:feedback()">Feedback</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
-    <div style="">
-        <a href=" /"><b>CSS Pivot</b></a> 
-        <small>
-        {% if id %}
-            &middot; <a href=" /{{ id }}"><b>{{ id }}</b></a>
-        {% endif %}
-            &middot; <a href="javascript:toggle_dialog()">view custom css</a>
-            &middot; <a href="javascript:toggle_more()" style="color:#888;">more</a>
-        </small> 
-    </div>
+    
 <div style="clear:both;"></div>
-</div>
-
-<div id="more" style="display:none;">
-    <a class="navlink" href="javascript:pivot_toggleorig()" id="txt_showorig">Show original website</a>
-    <a class="navlink" href="/d/{{ pivot.domain.url_domain_base }}">{{ pivot.domain.pivot_count }} pivots for this domain</a>
-    <p class="navlink">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}-{% endif %}</p>
-    <a class="navlink" href="javascript:feedback()">Feedback</a>
 </div>
