@@ -67,8 +67,8 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 <div style="margin-top:20px; margin-bottom:20px">
 <p><b>Active Websites</b></p>
-    {% for project in recent_projects %}
-        <a href="/a/{{ project.id }}" title="{{ project.url }}">{{ project.pivot_count }} pivot{{ project.pivot_count|pluralize }} for {{ project.url|truncate_chars:26 }}</a>
+    {% for project in recent_projects_5 %}
+        <p><a href="/a/{{ project.id }}" title="{{ project.url }}">{{ project.url|strip:"http:"|strip:"/"|truncate_chars:26 }} &middot; {{ project.pivot_count }} pivot{{ project.pivot_count|pluralize }}</a></p>
     {% endfor %}
 </div>
 

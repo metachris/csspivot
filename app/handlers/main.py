@@ -65,7 +65,8 @@ class Main(webapp.RequestHandler):
                 'recent': recent, 'heavy': heavy, \
                 "topdomains": topdomains[:20], \
                 'pivot_count': mc.get_pivot_count(), \
-                'recent_projects': recent_projects}))
+                'recent_projects': recent_projects,
+                'recent_projects_5': recent_projects[:5]}))
 
     def post(self):
         user = users.get_current_user()
@@ -87,6 +88,8 @@ class Main(webapp.RequestHandler):
             logging.info("- no css or url")
             self.response.out.write("no css or url")
             return
+
+        url = url.strip("/")
 
         if not css:
             css = ""
@@ -135,7 +138,7 @@ class Main(webapp.RequestHandler):
                 # Create a new pivot
                 project = None
                 if parent_project:
-                    # /a/<project-id>/new: find existing project
+                    # /a/<project-id>/new: new pivot for a specific project
                     project = Project.all().filter("id =", \
                             parent_project).get()
                     if project:
@@ -145,17 +148,25 @@ class Main(webapp.RequestHandler):
 
                 if not project:
                     # create a new project. first check if domain exists
-                    project = Project(userprefs=prefs, \
-                            id=gen_modelhash(Project), \
-                            title=title, \
-                            url=url, \
-                            rand=random.random())
+                    project = Project.all().filter("url =", \
+                            url).get()
+                    if project:
+                        logging.info("project found by url")
+                        project.pivot_count += 1
+                        project.put()
+                    else:
+                        logging.info("project not found")
+                        project = Project(userprefs=prefs, \
+                                id=gen_modelhash(Project), \
+                                title=title, \
+                                url=url, \
+                                rand=random.random())
 
-                    domain.project_count += 1
-                    project.domain = domain
-                    project.url_domain_base = d_base
-                    project.url_domain_full = d_full
-                    project.put()
+                        domain.project_count += 1
+                        project.domain = domain
+                        project.url_domain_base = d_base
+                        project.url_domain_full = d_full
+                        project.put()
 
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
@@ -186,6 +197,7 @@ class Main(webapp.RequestHandler):
         mc.get_pivot_count(clear=True)
         mc.pivots_for_domain(p.domain, clear=True)
         mc.get_topdomains(clear=True)
+        mc.get_recent_projects(clear=True)
 
         self.redirect("/%s" % p.id)
 
