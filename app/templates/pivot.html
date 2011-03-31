@@ -65,13 +65,13 @@ $(document).ready(function() {
     });
     
     $(window).bind('keypress', "`", function (evt){
-        if (evt.which == 96) { toggle_dialog(); return false; }
+        if (evt.which == 96) { pivot_toggleorig(); /*toggle_dialog();*/ return false; }
     });
     $(".ui-dialog").bind('keypress', "`", function (evt){ 
-        if (evt.which == 96) { toggle_dialog(); return false; }
+        if (evt.which == 96) { pivot_toggleorig(); return false; }
     });
     $(".ui-dialog-titlebar").bind('keypress', "`", function (evt){ 
-        if (evt.which == 96) { toggle_dialog(); return false; }
+        if (evt.which == 96) { pivot_toggleorig(); return false; }
     });
     $("#csspivot_css").keydown(function (e){ 
         if (e.keyCode == 9) {
