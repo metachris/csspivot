@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".btn").button();
+});
+</script>
+{% endblock %}
+
+{% block main %}
+
+{{ project.pivot_count }} pivot{{ project.pivot_count|pluralize }} for
+<h1 class="project_head">{{ project.url }}</h1>
+
+<div style="margin:40px;">
+<a href="/a/{{ project.id }}/new" class="btn">Start a New Pivot</a>
+</div>
+
+<hr>
+
+
+<div style="margin-top:20px; margin-bottom:20px">
+<p><b>Recent Pivots</b></p>
+    {% for pivot in project.pivot_set %}
+        <p><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code> &middot; {{ pivot.css|styles_count }} change{{ pivot.css|styles_count|pluralize }}</a></p>
+    {% endfor %}
+</div>
+
+<hr>
+
+<div style="margin:40px;">
+</div>
+
+
+<div style="margin:40px;">
+</div>
+
+{% endblock %}

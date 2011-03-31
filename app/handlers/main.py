@@ -138,11 +138,11 @@ class Main(webapp.RequestHandler):
                 # Create a new pivot
                 project = None
                 if parent_project:
-                    # /a/<project-id>/new: new pivot for a specific project
+                    # new pivot for a specific project (/a/<project-id>/new)
                     project = Project.all().filter("id =", \
                             parent_project).get()
+
                     if project:
-                        domain.project_count += 1
                         project.pivot_count += 1
                         project.put()
 
