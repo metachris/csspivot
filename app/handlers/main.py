@@ -56,14 +56,16 @@ class Main(webapp.RequestHandler):
 
         recent = mc.get_recent_pivots()[:10]
         heavy = mc.get_heavy_pivots()[:10]
-        topdomains = mc.get_topdomains()[:10]
+        topdomains = mc.get_topdomains()[:20]
+        recent_projects = mc.get_recent_projects()
 
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "index.html", \
                 {"prefs": prefs, 'invalid_url': invalid_url, \
                 'recent': recent, 'heavy': heavy, \
                 "topdomains": topdomains[:20], \
-                'pivot_count': mc.get_pivot_count()}))
+                'pivot_count': mc.get_pivot_count(), \
+                'recent_projects': recent_projects}))
 
     def post(self):
         user = users.get_current_user()
@@ -78,6 +80,7 @@ class Main(webapp.RequestHandler):
         comment = decode(self.request.get('csspivot_comment'))
         new = decode(self.request.get('csspivot_new'))
         orig = decode(self.request.get('csspivot_orig'))
+        parent_project = decode(self.request.get('csspivot_project'))
         #logging.info("new: %s" % new)
 
         if not url:
@@ -110,6 +113,7 @@ class Main(webapp.RequestHandler):
 
             d_base, d_full = get_domains(url)
 
+            # Create domain if needed
             domain_created = False
             domain = Domain.all().filter("url_domain_base =", d_base).get()
             if not domain:
@@ -118,16 +122,40 @@ class Main(webapp.RequestHandler):
                 domain.put()
                 domain_created = True
 
-            if not parent_pivot:
-                # create a new project. first check if domain exists
-                project = Project(userprefs=prefs, id=gen_modelhash(Project), \
-                        title=title, url=url, rand=random.random())
+            # Create project if needed, and increment counts
+            if parent_pivot:
+                # project already exists, just increment pivot count
+                parent_pivot.project.pivot_count += 1
+                parent_pivot.project.put()
 
-                domain.project_count += 1
-                project.domain = domain
-                project.url_domain_base = d_base
-                project.url_domain_full = d_full
-                project.put()
+                parent_pivot.domain.pivot_count += 1
+                parent_pivot.domain.put()
+
+            else:
+                # Create a new pivot
+                project = None
+                if parent_project:
+                    # /a/<project-id>/new: find existing project
+                    project = Project.all().filter("id =", \
+                            parent_project).get()
+                    if project:
+                        domain.project_count += 1
+                        project.pivot_count += 1
+                        project.put()
+
+                if not project:
+                    # create a new project. first check if domain exists
+                    project = Project(userprefs=prefs, \
+                            id=gen_modelhash(Project), \
+                            title=title, \
+                            url=url, \
+                            rand=random.random())
+
+                    domain.project_count += 1
+                    project.domain = domain
+                    project.url_domain_base = d_base
+                    project.url_domain_full = d_full
+                    project.put()
 
             p = Pivot(userprefs=prefs, project=project, css=css, \
                     id=gen_modelhash(Pivot), comment=comment, \
@@ -172,13 +200,35 @@ class PivotView(webapp.RequestHandler):
             self.error(404)
             return
 
-        key = random.randint(0, 100000000000000)
-        memcache.set("_pivotpreview-%s" % key, pivot.css)
+        self.response.out.write(show_pivotview(prefs, pivot=pivot))
 
-        webapp.template.register_template_library('common.templateaddons')
-        self.response.out.write(template.render(tdir + "pivot.html", \
-                {"prefs": prefs, 'url': pivot.url, 'key': key, \
-                'css': pivot.css, 'id': pivot.id, 'pivot': pivot}))
+
+class ProjectNewPivot(webapp.RequestHandler):
+    """ Same as pivot view except the project parameter """
+    def get(self, project_id, pivot_id=None):
+        """ If pivot_id is None then its a new pivot for this project """
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        project = mc.project_by_id(project_id)
+        if not project:
+            self.error(404)
+            return
+
+        pivot = {"css": "", "url": project.url}
+        self.response.out.write(show_pivotview(prefs, pivot, \
+                project=project, show_dialog=True))
+
+
+def show_pivotview(prefs, pivot, project=None, show_dialog=False):
+    key = random.randint(0, 100000000000000)
+    if isinstance(pivot, Pivot):
+        memcache.set("_pivotpreview-%s" % key, pivot.css)
+    logging.info(pivot)
+    webapp.template.register_template_library('common.templateaddons')
+    return template.render(tdir + "pivot.html", \
+            {"prefs": prefs, 'key': key, 'pivot': pivot, \
+            'project': project, 'showdialog': show_dialog})
 
 
 class PivotDetails(webapp.RequestHandler):
@@ -236,10 +286,13 @@ class Preview(webapp.RequestHandler):
         key = random.randint(0, 100000000000000)
         memcache.set("_pivotpreview-%s" % key, css)
         #logging.info("set mc [%s]: %s" % (key, css))
+
+        pivot = {"css": css, "url": url, "id": None}
+
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + "pivot.html", \
-                {"prefs": prefs, 'url': url, 'key': key, 'css': css, \
-                'id': None, 'showdialog': showdialog}))
+                {"prefs": prefs, 'pivot': pivot, 'key': key, \
+                'showdialog': showdialog}))
         return
 
 
@@ -382,3 +435,22 @@ class DomainView(webapp.RequestHandler):
         self.response.out.write(template.render(tdir + "domain.html", \
                 {"prefs": prefs, 'pivots': pivots, 'count': len(pivots),\
                 'domain_base': domain_base}))
+
+
+class ProjectView(webapp.RequestHandler):
+    def head(self, screen_name=None):
+        return
+
+    def get(self, project_id):
+        # feedback form submit
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        project = mc.project_by_id(project_id)
+        if not project:
+            self.error(404)
+            return
+
+        webapp.template.register_template_library('common.templateaddons')
+        self.response.out.write(template.render(tdir + "project_view.html", \
+                {"prefs": prefs, 'project': project}))

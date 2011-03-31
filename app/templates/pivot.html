@@ -8,13 +8,13 @@
 {% endblock %}
 
 {% block head %}
-  <title>CSS Pivot {{ id }}: {{ url|remove:"http://"|strip:"/" }}</title>
-  <meta name="description" content="CSS pivot for {{ url }}: {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}">
+  <title>CSS Pivot {{ pivot.id }}: {{ pivot.url|remove:"http://"|strip:"/" }}</title>
+  <meta name="description" content="CSS pivot for {{ pivot.url }}: {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}">
 {% endblock %}
   
 {% block scripts %}
 <script type="text/javascript">
-var url = "{{ url }}";
+var url = "{{ pivot.url }}";
 function savepivot(new_file) {
     css = $("#csspivot_css").val();     
     if (css.length == 0) { alert("Please enter a style before saving"); return ; }
@@ -27,7 +27,7 @@ function savepivot(new_file) {
     if (new_file)
         $("#csspivot_new").val("1");
     else
-        $("#csspivot_new").val("{{ id }}");
+        $("#csspivot_new").val("{{ pivot.id }}");
 
     $("#csspivot_form").submit(); 
 }
@@ -101,15 +101,15 @@ function toggle_dialog() {
         $("#csspivot_cssdialog").dialog("open");
 }
 
-{% if id %}
+{% if pivot %}
     k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
     recent = localStorage.getItem("pivots_recentlyviewed" + k);
     if (!recent) recent = "";
     
-    recent = "{{ id }}," + recent.replace("{{ id }},", "");
+    recent = "{{ pivot.id }}," + recent.replace("{{ pivot.id }},", "");
     localStorage.setItem("pivots_recentlyviewed" + k, recent);
-    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ id }}_cnt", "{{ css|styles_count }}");
-    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ id }}_url", "{{ url }}");
+    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ pivot.id }}_cnt", "{{ pivot.css|styles_count }}");
+    localStorage.setItem("pivots_recentlyviewed" + k + "_{{ pivot.id }}_url", "{{ pivot.url }}");
 {% endif %}
 
 
@@ -119,16 +119,17 @@ function toggle_dialog() {
 {% block main %}
 {% include "headerbar.html" %}
 
-<iframe src="/proxy?url={{ url }}&key={{ key }}" width="100%" height="100%" frameborder="0" noresize="0" name="proxy" id="iframe" scrolling="auto"></iframe>
+<iframe src="/proxy?url={{ pivot.url }}&key={{ key }}" width="100%" height="100%" frameborder="0" noresize="0" name="proxy" id="iframe" scrolling="auto"></iframe>
 <iframe src="" width="100%" height="100%" frameborder="0" noresize="0" name="proxy" id="iframe_orig" style="display:none;" scrolling="auto"></iframe>
 
 <div id="csspivot_cssdialog" title="Custom Styles <small style='margin-left:80px; font-weight:normal;' title='add !important to overwrite all other definitions'><code>!important</code> is your friend</small>">
     <form action="/" method="post" id="csspivot_form">
-        <input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ url }}" />
-        <input type="hidden" id="csspivot_orig" name="csspivot_orig" value="{{ id }}" />
+        <input type="hidden" id="csspivot_url" name="csspivot_url" value="{{ pivot.url }}" />
+        <input type="hidden" id="csspivot_project" name="csspivot_project" value="{{ project.id }}" />
+        <input type="hidden" id="csspivot_orig" name="csspivot_orig" value="{{ pivot.id }}" />
         <input type="hidden" id="csspivot_comment" name="csspivot_comment" value="{{ comment }}" />
         <input type="hidden" id="csspivot_new" name="csspivot_new" value="0" />
-        <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ css }}</textarea>
+        <textarea style="width:98%; height:222px; font-size:13px; font-family:monospace;" name="csspivot_css" id="csspivot_css">{{ pivot.css }}</textarea>
     </form>
 </div>
 

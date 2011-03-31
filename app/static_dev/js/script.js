@@ -107,6 +107,11 @@ function showpivots(i) {
         $("#discover_pivotlist").html($("#_topdomains").html());
         $("#dialog_pivots").dialog("open");
         $("#dialog_pivots").dialog("option", "title", 'Top Domains'); 
+
+    } else if (i == 30) {
+        $("#discover_pivotlist").html($("#_recent_projects").html());
+        $("#dialog_pivots").dialog("open");
+        $("#dialog_pivots").dialog("option", "title", 'Active Projects'); 
     }
 }
 

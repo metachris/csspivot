@@ -45,6 +45,24 @@ def get_recent_pivots(clear=False):
     return pivots
 
 
+def get_recent_projects(clear=False):
+    if clear:
+        memcache.delete("projects_recent")
+        return
+
+    projects = memcache.get("projects_recent")
+    if projects:
+        #logging.info("return cached pivots")
+        return projects
+
+    projects = []
+    for project in Project.all().order("-date_updated").fetch(20):
+        projects.append(project)
+
+    memcache.set("projects_recent", projects)
+    return projects
+
+
 def get_heavy_pivots(clear=False):
     if clear:
         memcache.delete("pivots_heavy2")
@@ -119,3 +137,18 @@ def get_topdomains(clear=False):
     memcache.set("domains-top", domains)
     logging.info("cached domains")
     return domains
+
+
+def project_by_id(project_id, clear=False):
+    if clear:
+        memcache.delete("project_%s" % project_id)
+        return
+
+    project = memcache.get("project_%s" % project_id)
+    if project:
+        return project
+
+    project = Project.all().filter("id =", project_id).get()
+    memcache.set("project_%s" % project_id, project)
+    logging.info("cached project %s" % project_id)
+    return project

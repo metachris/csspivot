@@ -14,11 +14,13 @@ body, select, input, textarea {
   -moz-text-shadow: 0 1px #fff;
   -webkit-text-shadow: 0 1px #fff;
 }
+b { font-weight:bold; }
 
 hr { border-top:1px solid #DDD; }
 
 /* Headers (h1, h2, etc) have no default font-size or margin; define those yourself */
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+h1 { font-size:16px; margin-bottom:14px; }
 h2 { font-size:16px; margin-bottom:14px; }
 
 a, a:active, a:visited { 
@@ -186,4 +188,13 @@ p { margin-bottom:10px; }
 
 #more hr {
     margin:8px 0px;
+}
+
+
+
+h1.project_head {
+   font-family: 'AllerRegular', Helvetica, Arial, default;
+   font-size:23px;
+   margin-top:5px;
+   font-weight:normal;
 }

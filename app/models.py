@@ -94,11 +94,13 @@ class Project(db.Model):
     url_domain_base = db.StringProperty()   # eg. google.com
 
     date_submitted = db.DateTimeProperty(auto_now_add=True)
+    date_updated = db.DateTimeProperty(auto_now=True)
+    pivot_count = db.IntegerProperty(default=1)
 
 
 class Pivot(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
-    project = db.ReferenceProperty(Project, required=True)
+    project = db.ReferenceProperty(Project)
     domain = db.ReferenceProperty(Domain)
     parent_pivot = db.SelfReferenceProperty()
 

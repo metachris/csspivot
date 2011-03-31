@@ -39,6 +39,8 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 {% block main %}
 <p style="color:#777;">Add CSS styles to any website, and share the result with a short link</p>
 
+<p style="color:#777;">Invite others to submit improvements for your website</p>
+
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
 <div style="padding-left:26px; margin-top:60px;">
 <div id="pivot" style="background:url(/images/inputshape2.png) top left no-repeat; width:605px; height:80px;">
@@ -57,8 +59,18 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 </div>
 </form>
 
-<div style="margin-top:80px;"></div>
+<div style="margin-top:40px;"></div>
 
+
+<hr style="width:40%; margin:auto;">
+
+
+<div style="margin-top:20px; margin-bottom:20px">
+<p><b>Active Websites</b></p>
+    {% for project in recent_projects %}
+        <a href="/a/{{ project.id }}" title="{{ project.url }}">{{ project.pivot_count }} pivot{{ project.pivot_count|pluralize }} for {{ project.url|truncate_chars:26 }}</a>
+    {% endfor %}
+</div>
 
 <hr style="width:40%; margin:auto;">
 
@@ -111,6 +123,11 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
         </ul>
         <hr>
         <ul>
+            <li><a href="javascript:showpivots(30)">Active websites</a></li>
+            <!-- <li>Search for a domain</li> -->
+        </ul>
+        <hr>
+        <ul>
             <li><a href="javascript:showpivots(20)">Top domains</a></li>
             <!-- <li>Search for a domain</li> -->
         </ul>
@@ -124,6 +141,7 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 
 
 <div id="_recent" style="display:none;"><ul>{% for pivot in recent %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code></a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.css|styles_count }} change{{ pivot.css|styles_count|pluralize }}</small>{% endfor %}</div>
+<div id="_recent_projects" style="display:none;"><ul>{% for project in recent_projects %}<li><a href="/a/{{ project.id }}" title="{{ project.url }}"><code>{{ project.id }}</code></a> &middot; <small>{{ project.url|truncate_chars:26 }} &middot; {{ project.pivot_count }} pivot{{ project.pivot_count|pluralize }}</small>{% endfor %}</div>
 <div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code></a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}</small>{% endfor %}</div>
 <div id="_topdomains" style="display:none;"><ul>{% for domain in topdomains %}<li><a href="/d/{{ domain.url_domain_base }}">{{ domain.url_domain_base }}</a>: {{ domain.pivot_count }} pivot{{ domain.pivot_count|pluralize }}</small>{% endfor %}</div>
 <div id="_examples" style="display:none;"><ul>
