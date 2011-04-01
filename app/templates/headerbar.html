@@ -1,20 +1,23 @@
 <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 
-<div id="csspivot" style="" role="navigation">
+<div id="csspivot" role="navigation">
 	<div class="menu-header">
-    	<ul class="menu">
-            <li><a href=" /"><img src="/images/pivot_box.png" alt="Pivot Box" /><b>CSS Pivot</b></a></li>
-            {% if id %}<li><a href=" /{{ id }}"><b>{{ id }}</b></a></li>{% endif %}
-            <li><a href="javascript:toggle_dialog()">view custom css</a></li>
-            <li><a href="#">more</a>
-                <ul>
-                    <li><a class="navlink" href="javascript:pivot_toggleorig()" id="txt_showorig">Show original website</a></li>
-                    <li><a class="navlink" href="/d/{{ pivot.domain.url_domain_base }}">{{ pivot.domain.pivot_count }} pivots for this domain</a></li>
-                    <li><a class="navlink" href="#">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}-{% endif %}</a></li>
-                    <li><a class="navlink" href="javascript:feedback()">Feedback</a></li>
-                </ul>
-            </li>
-        </ul>
+    	<div class="navigation">
+            <ul class="menu">
+            	<li><a href="#"><img src="/images/pivot_box.png" alt="Pivot Box" /></a></li>
+                <li><a href=" /"><b>CSS Pivot</b></a></li>
+                {% if pivot.id %}<li><a href=" /{{ pivot.id }}"><b>{{ pivot.id }}</b></a></li>{% endif %}
+                <li><a href="javascript:toggle_dialog()">view custom css</a></li>
+                <li><a href="#">more</a>
+                    <ul>
+                        <li><a class="navlink" href="javascript:pivot_toggleorig()" id="txt_showorig">Show original website</a></li>
+                        <li><a class="navlink" href="/d/{{ pivot.domain.url_domain_base }}">{{ pivot.domain.pivot_count }} pivots for this domain</a></li>
+                        <li><a class="navlink" href="#">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}-{% endif %}</a></li>
+                        <li><a class="navlink" href="javascript:feedback()">Feedback</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
         <div class="social">
         	<ul>
                 {% if prefs %}
