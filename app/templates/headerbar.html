@@ -4,7 +4,7 @@
 	<div class="menu-header">
     	<div class="navigation">
             <ul class="menu">
-            	<li><a href="javascript:pivot_toggleorig()" style="padding-right:6px; padding-left:6px;" title="Toggle between original and customized website">
+            	<li><a href="javascript:pivot_toggleorig()" style="padding-right:6px; padding-left:6px; padding-top:4px;" title="Toggle between original and customized website">
             	   <div id="pivoticon" class="enabled"></div>
         	   </a></li>
                 <li><a href=" /"><b>CSS Pivot</b></a></li>
@@ -25,7 +25,7 @@
                 {% if prefs %}
                     <li><a href="/account">{{ prefs.nickname }}</a></li>
                 {% else %}
-                    <li><a href="/login?continue=/{{ id }}" title="A user account lets you manage your pivots and much more!">sign in</a></li>
+                    <li><a href="/login?continue=/{{ pivot.id }}" title="A user account lets you manage your pivots and much more!">sign in</a></li>
                 {% endif %}
                 <li><a href="#">share</a>
                 	<ul style="left: -98px;">
