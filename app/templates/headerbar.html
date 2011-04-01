@@ -14,7 +14,7 @@
                     <ul>
                         <li><a class="navlink" href="javascript:pivot_toggleorig()" id="txt_showorig">Show original website</a></li>
                         <li><a class="navlink" href="/d/{{ pivot.domain.url_domain_base }}">{{ pivot.domain.pivot_count }} pivots for this domain</a></li>
-                        <li><a class="navlink" href="#">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}-{% endif %}</a></li>
+                        <li><p class="navlink" href="#" style="color:#999;">Author: {% if pivot.userprefs %}{{ pivot.userprefs.nickname }}{% else %}Anonymous{% endif %}</p></li>
                         <li><a class="navlink" href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;">Feedback</a></li>
                     </ul>
                 </li>
