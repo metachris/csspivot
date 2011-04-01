@@ -172,7 +172,9 @@ function pivot_toggleorig() {
     if (is_orig_shown) {
         $("#iframe_orig").hide();
         $("#iframe").show();
+        
         $("#txt_showorig").html("Show original website");
+        $("#pivoticon").removeClass("disabled");        
     } else {
         if (!is_orig_loaded) {
             document.getElementById("iframe_orig").src = url;
@@ -181,6 +183,7 @@ function pivot_toggleorig() {
         $("#iframe_orig").show();
         $("#iframe").hide();
         $("#txt_showorig").html("Show custom variation");
+        $("#pivoticon").addClass("disabled");        
     }
     is_orig_shown = !is_orig_shown;
     //is_more_shown = true;

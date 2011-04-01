@@ -4,7 +4,9 @@
 	<div class="menu-header">
     	<div class="navigation">
             <ul class="menu">
-            	<li><a href="#"><img src="/images/pivot_box.png" alt="Pivot Box" /></a></li>
+            	<li><a href="javascript:pivot_toggleorig()" style="padding-right:6px; padding-left:6px;" title="Toggle between original and customized website">
+            	   <div id="pivoticon" class="enabled"></div>
+        	   </a></li>
                 <li><a href=" /"><b>CSS Pivot</b></a></li>
                 {% if pivot.id %}<li><a href=" /{{ pivot.id }}"><b>{{ pivot.id }}</b></a></li>{% endif %}
                 <li><a href="javascript:toggle_dialog()">view custom css</a></li>
@@ -28,9 +30,9 @@
                 <li><a href="#">share</a>
                 	<ul style="left: -98px;">
                 	{% if pivot.id %}
-                        <a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share on Facebook" target="_blank"><img src="/images/fb.png" width="16" height="16" /> Facebook</a>
-                        <a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share on Twitter" target="_blank"><img src="/images/twitter.png" width="16" height="16" /> Twitter</a>
-                        <a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share on Forrst"><img src="/images/forrst_green.png" width="16" height="16"/> Forrst</a>
+                        <a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ pivot.id }}" title="Share on Facebook" target="_blank"><img src="/images/fb.png" width="16" height="16" /> Facebook</a>
+                        <a href="http://twitter.com/home?status=CSS pivot for {{ pivot.url|truncate_chars:90 }}: http://www.csspivot.com/{{ pivot.id }}" title="Share on Twitter" target="_blank"><img src="/images/twitter.png" width="16" height="16" /> Twitter</a>
+                        <a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ pivot.id }}&t=CSS%20pivot%20for%20{{ pivot.url }}" title="Share on Forrst" target="_blank"><img src="/images/forrst_green.png" width="16" height="16"/> Forrst</a>
                     {% else %}
                         <img src="/images/fb_gray.png" title="Save before sharing on Facebook" width="16" height="16" />
                         <img src="/images/twitter_gray.png" title="Save before sharing on Twitter" width="16" height="16" />

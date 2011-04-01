@@ -202,7 +202,7 @@ div.menu li {
 }
 
 #csspivot a:active {
-	color: #F1F1F1;
+	color:  #0081a5;
 }
 
 #csspivot ul ul {
@@ -275,6 +275,16 @@ div.menu li {
 	margin: 0 0 0 10px;
 	float:right; 
 	border-left: 1px solid #b1b1b1;
+}
+
+#csspivot #pivoticon.enabled {
+    width:12px;
+    height:14px;
+    background:url(/images/pivot_box_both.png) no-repeat 0px 0px;
+}
+
+#csspivot #pivoticon.disabled {
+    background:url(/images/pivot_box_both.png) no-repeat 0px -14px;
 }
 
 /* End Header Bar CSS Nav */
