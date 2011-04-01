@@ -1,6 +1,6 @@
 # Replace 'ae-boilerplate' with your application name
 application: csspivot
-version: 7
+version: 8
 runtime: python
 api_version: 1
 

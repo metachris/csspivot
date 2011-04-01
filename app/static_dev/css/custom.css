@@ -9,7 +9,7 @@ html, body { height:100%; background:#fafafa; }
 body, select, input, textarea {
   /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
   color: #444;
-  font-family: 'AllerRegular', Helvetica, Arial, default;
+  font-family: 'PT Sans', Helvetica, Arial, default;
   text-shadow: 0 1px #fff;
   -moz-text-shadow: 0 1px #fff;
   -webkit-text-shadow: 0 1px #fff;
@@ -18,7 +18,7 @@ body, select, input, textarea {
 hr { border-top:1px solid #DDD; }
 
 /* Headers (h1, h2, etc) have no default font-size or margin; define those yourself */
-h1, h2, h3, h4, h5, h6 { font-weight: normal; font-family: 'AllerBold'; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; font-family: 'PT Sans'; font-weight:bold; }
 h2 { font-size:16px; margin-bottom:14px; }
 
 a, a:active, a:visited { 
@@ -106,9 +106,9 @@ p { margin-bottom:10px; }
 }    
 */
 
-#csspivot {
-	
-}
+
+
+
 
 #csspivot a {
 	
@@ -126,12 +126,10 @@ p { margin-bottom:10px; }
 	padding-left:2px;
 	margin-top:2px;
 }
-
-
 /* Header Bar CSS Menu Navigation */
 
 #csspivot {
-	border-bottom:1px solid gray;
+	border-bottom:1px solid #AAA;
 	font-size:13px;
 	text-align:left;
 	color:#444;
@@ -244,17 +242,12 @@ div.menu li {
 	height: auto;
 }
 
+/* (Uncommented because I just want to experiment with the same background as the share menu item)
 #csspivot ul ul :hover > a {
-	color: #fff;
-	/* Opera */
 	background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjpyZ2JhKDE0NywxNDcsMTQ3LDEpOyIgLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOnJnYmEoMTg2LDE4NiwxODYsMSk7IiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IGZpbGw9InVybCgjZ3JhZGllbnQpIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIiAvPjwvc3ZnPg==);
-	/* Firefox */
 	background: -moz-linear-gradient( top, rgba(147,147,147,1), rgba(186,186,186,1) );
-	/* Chrome & Safari */
 	background: -webkit-gradient( linear, left top, left bottom, color-stop( 0, rgba(147,147,147,1) ), color-stop( 1, rgba(186,186,186,1) ) );
-	/* IE5.5 - IE7 */
 	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#FF939393,EndColorStr=#FFBABABA);
-	/* IE8 */
 	-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#FF939393,EndColorStr=#FFBABABA)";
 	text-shadow: 0 -1px #666;
   	-moz-text-shadow: 0 -1px #666;
@@ -265,21 +258,10 @@ div.menu li {
 	-moz-box-shadow: 0 0 5px rgba(0,0,0,.3) inset;
 	-webkit-box-shadow: 0 0 5px rgba(0,0,0,.3) inset;
 }
+*/
+
 #csspivot ul li:hover > ul {
 	display: block;
-}
-#csspivot ul li.current_page_item > a,
-#csspivot ul li.current-menu-ancestor > a,
-#csspivot ul li.current-menu-item > a,
-#csspivot ul li.current-menu-parent > a {
-	
-}
-* html #csspivot ul li.current_page_item a,
-* html #csspivot ul li.current-menu-ancestor a,
-* html #csspivot ul li.current-menu-item a,
-* html #csspivot ul li.current-menu-parent a,
-* html #csspivot ul li a:hover {
-
 }
 
 #csspivot .navigation {
@@ -344,7 +326,7 @@ div.menu li {
 
 
 h1.project_head {
-   font-family: 'AllerRegular', Helvetica, Arial, default;
+   font-family: 'PT Sans', Helvetica, Arial, default;
    font-size:23px;
    margin-top:5px;
    font-weight:normal;

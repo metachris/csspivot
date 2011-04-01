@@ -27,9 +27,15 @@
                 {% endif %}
                 <li><a href="#">share</a>
                 	<ul style="left: -98px;">
-                    	<li>{% if id %}<a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share this pivot on Facebook" target="_blank">{% endif %}<p><img src="/images/fb{% if not id %}_gray{% endif %}.png" width="16" height="16" /> Facebook</p></a></li>
-                        <li>{% if id %}<a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share this pivot on Twitter" target="_blank">{% endif %}<p><img src="/images/twitter{% if not id %}_gray{% endif %}.png" width="16" height="16" /> Twitter</p></a></li>
-                        <li>{% if id %}<a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share this pivot on Forrst">{% endif %}<p><img src="/images/forrst_green{% if not id %}_gray{% endif %}.png" width="16" height="16"/> Forrst</p></a></li>
+                	{% if pivot.id %}
+                        <a href="http://www.facebook.com/sharer.php?u=http://www.csspivot.com/{{ id }}" title="Share on Facebook" target="_blank"><img src="/images/fb.png" width="16" height="16" /> Facebook</a>
+                        <a href="http://twitter.com/home?status=CSS pivot for {{ url|truncate_chars:90 }}: http://www.csspivot.com/{{ id }}" title="Share on Twitter" target="_blank"><img src="/images/twitter.png" width="16" height="16" /> Twitter</a>
+                        <a href="http://forrst.com/posts/new?b=1&v=5&u=http://www.csspivot.com/{{ id }}&t=CSS%20pivot%20for%20{{ url }}" title="Share on Forrst"><img src="/images/forrst_green.png" width="16" height="16"/> Forrst</a>
+                    {% else %}
+                        <img src="/images/fb_gray.png" title="Save before sharing on Facebook" width="16" height="16" />
+                        <img src="/images/twitter_gray.png" title="Save before sharing on Twitter" width="16" height="16" />
+                        <img title="Save before sharing on Forrst" src="/images/forrst_green_gray.png" width="16" height="16"/>
+                    {% endif %}
                     </ul>
                 </li>
         	<ul>
