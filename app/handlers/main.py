@@ -219,7 +219,7 @@ class PivotView(webapp.RequestHandler):
 
         vote = decode(self.request.get('vote'))
         starred = None
-        if vote == "1":
+        if prefs and vote == "1":
             star = Star.all().filter("userprefs =", prefs) \
                     .filter("pivot =", pivot).get()
             if not star:
@@ -251,15 +251,16 @@ class ProjectNewPivot(webapp.RequestHandler):
 def show_pivotview(prefs, pivot, project=None, show_dialog=False, \
         starred=None):
     key = random.randint(0, 100000000000000)
+
+    _starred = starred
+    # pivot may be a dict or a Pivot object
     if isinstance(pivot, Pivot):
         memcache.set("_pivotpreview-%s" % key, pivot.css)
 
-    # Helper to avoid reading from db right after writing
-    if starred:
-        _starred = starred
-    else:
-        _starred = Star.all().filter("userprefs =", prefs) \
-                .filter("pivot =", pivot).count()
+        # Helper to avoid reading from db right after writing
+        if not starred:
+            _starred = Star.all().filter("userprefs =", prefs) \
+                    .filter("pivot =", pivot).count()
 
     webapp.template.register_template_library('common.templateaddons')
     return template.render(tdir + "pivot.html", \
