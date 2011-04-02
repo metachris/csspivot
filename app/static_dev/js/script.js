@@ -189,3 +189,26 @@ function pivot_toggleorig() {
     //is_more_shown = true;
     //toggle_more();
 }
+
+function toggle_star() {
+    $.ajax({
+        type: 'POST',
+        url: "/ajax/star",
+        data: {'action': (is_starred) ? "-1" : "1"},
+        success: function(){
+        }
+    });
+    if (is_starred) {
+        $("#staricon").removeClass("enabled");
+        $("#staricon").addClass("disabled");
+    } else {
+        $("#staricon").removeClass("disabled");
+        $("#staricon").addClass("enabled");
+    }
+    is_starred = !is_starred;
+}
+
+function signin(continue_to) {
+    $("#continue").val(continue_to);
+    $("#dialog_signin").dialog("open");
+}

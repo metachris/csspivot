@@ -15,6 +15,8 @@
 {% block scripts %}
 <script type="text/javascript">
 var url = "{{ pivot.url }}";
+var is_starred = {% if starred %}true{% else %}false{% endif %};
+
 function savepivot(new_file) {
     css = $("#csspivot_css").val();     
     if (css.length == 0) { alert("Please enter a style before saving"); return ; }
@@ -42,7 +44,14 @@ $(document).ready(function() {
 
 	$(".csspivot_btn").button();
 	$(".btn").button();
+
     $("#dialog_feedback").dialog({ autoOpen: false, width:450 });
+
+    {% if not prefs %}
+    	openid.init('openid_identifier');
+        $("#dialog_signin").dialog({ autoOpen: false, width:640 });
+    {% endif %}
+
     $("#csspivot_cssdialog").dialog({ 
         autoOpen: {% if showdialog %}true{% else %}false{% endif %},
         zIndex: 3999, 

@@ -266,11 +266,18 @@ text-shadow: 0 -1px #666;
     width:12px;
     height:14px;
 }
-#csspivot #pivoticon.enabled {
-    background:url(/images/pivot_box_both.png) no-repeat 0px 0px;
+#csspivot #pivoticon.enabled { background:url(/images/pivot_box_both.png) no-repeat 0px 0px; }
+#csspivot #pivoticon.disabled { background:url(/images/pivot_box_both.png) no-repeat 0px -14px; }
+
+#csspivot #staricon {
+    width:16px;
+    height:16px;
 }
-#csspivot #pivoticon.disabled {
-    background:url(/images/pivot_box_both.png) no-repeat 0px -14px;
+#csspivot #staricon.enabled {
+    background:url(/images/star_both.png) no-repeat 0px 0px;
+}
+#csspivot #staricon.disabled {
+    background:url(/images/star_both.png) no-repeat 0px -16px;
 }
 
 /* End Header Bar CSS Nav */

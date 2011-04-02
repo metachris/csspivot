@@ -22,6 +22,9 @@
         </div>
         <div class="social">
         	<ul>
+                <li><a href="javascript:{% if prefs %}toggle_star(){% else %}signin('/{{ pivot.id }}?vote=1'){% endif %}" style="padding-right:6px; padding-left:6px; padding-top:4px;">
+            	   <div id="staricon" {% if starred %}class="enabled" title="You have starred this pivot"{% else %}class="disabled" title="Star this pivot!"{% endif %}></div>
+                </a></li>
                 {% if prefs %}
                     <li><a href="/account">{{ prefs.nickname }}</a></li>
                 {% else %}
