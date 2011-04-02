@@ -194,8 +194,9 @@ function toggle_star() {
     $.ajax({
         type: 'POST',
         url: "/ajax/star",
-        data: {'action': (is_starred) ? "-1" : "1"},
+        data: {'action': (is_starred) ? "-1" : "1", 'pivot_id': pivot_id},
         success: function(){
+
         }
     });
     if (is_starred) {

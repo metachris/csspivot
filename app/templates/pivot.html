@@ -16,6 +16,7 @@
 <script type="text/javascript">
 var url = "{{ pivot.url }}";
 var is_starred = {% if starred %}true{% else %}false{% endif %};
+var pivot_id = "{{ pivot.id }}";
 
 function savepivot(new_file) {
     css = $("#csspivot_css").val();     

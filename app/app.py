@@ -16,6 +16,7 @@ from handlers import *
 urls = [
     (r'/admin', AdminView),
     (r'/login', LogIn),
+    (r'/ajax/star', StarAction),
     (r'/_ah/login_required', LogIn),
     (r'/logout', LogOut),
     (r'/account', AccountView),

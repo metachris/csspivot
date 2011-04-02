@@ -118,3 +118,10 @@ class Pivot(db.Model):
 
     # number of : characters (single styles)
     styles_count = db.IntegerProperty(default=0)
+    star_count = db.IntegerProperty(default=1)
+
+
+class Star(db.Model):
+    userprefs = db.ReferenceProperty(InternalUser)
+    pivot = db.ReferenceProperty(Pivot)
+    date_submitted = db.DateTimeProperty(auto_now_add=True)

@@ -236,11 +236,15 @@ def show_pivotview(prefs, pivot, project=None, show_dialog=False):
     key = random.randint(0, 100000000000000)
     if isinstance(pivot, Pivot):
         memcache.set("_pivotpreview-%s" % key, pivot.css)
-    logging.info(pivot)
+
+    starred = Star.all().filter("userprefs =", prefs) \
+            .filter("pivot =", pivot).get()
+
     webapp.template.register_template_library('common.templateaddons')
     return template.render(tdir + "pivot.html", \
             {"prefs": prefs, 'key': key, 'pivot': pivot, \
-            'project': project, 'showdialog': show_dialog})
+            'project': project, 'showdialog': show_dialog, \
+            'starred': starred})
 
 
 class PivotDetails(webapp.RequestHandler):
