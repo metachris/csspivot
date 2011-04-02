@@ -19,6 +19,7 @@ urls = [
     (r'/ajax/star', StarAction),
     (r'/_ah/login_required', LogIn),
     (r'/logout', LogOut),
+    (r'/account/settings', AccountSettingsView),
     (r'/account', AccountView),
     (r'/preview', Preview),
     (r'/proxy', ProxyView),

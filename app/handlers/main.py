@@ -219,7 +219,7 @@ class PivotView(webapp.RequestHandler):
 
         vote = decode(self.request.get('vote'))
         starred = None
-        if vote == 1:
+        if vote == "1":
             star = Star.all().filter("userprefs =", prefs) \
                     .filter("pivot =", pivot).get()
             if not star:

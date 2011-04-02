@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".btn").button();
+});
+</script>
+{% endblock %}
+
+{% block main %}
+<h1>Settings</h1>
+<a href="/account">< back</a>
+
+<style>
+    td { padding:6px 10px; }
+</style>
+
+<div id="settings" style="margin:40px 20px 0px 148px; text-align:left; font-size:15px;">
+
+<table>
+
+<tr><td>Username:</td><td><input type="text" name="username" style="padding:3px;" value="{{ prefs.nickname }}" disabled=disabled /></td></tr>
+<tr><td>Email Address:</td><td><input type="text" name="email" style="padding:3px;" value="{{ prefs.email }}"  disabled=disabled /></td></tr>
+<tr><td></td><td><br><br>Coming tomorrow!</td></tr>
+
+</tr></table>
+</div>
+{% endblock %}
