@@ -191,6 +191,11 @@ class Main(webapp.RequestHandler):
 
         p.put()
 
+        if prefs:
+            # auto star
+            star = Star(userprefs=prefs, pivot=p)
+            star.put()
+
         # Clear Cache
         mc.get_recent_pivots(clear=True)
         mc.get_heavy_pivots(clear=True)
@@ -212,7 +217,18 @@ class PivotView(webapp.RequestHandler):
             self.error(404)
             return
 
-        self.response.out.write(show_pivotview(prefs, pivot=pivot))
+        vote = decode(self.request.get('vote'))
+        starred = None
+        if vote == 1:
+            star = Star.all().filter("userprefs =", prefs) \
+                    .filter("pivot =", pivot).get()
+            if not star:
+                star = Star(userprefs=prefs, pivot=pivot)
+                star.put()
+                starred = True
+
+        self.response.out.write(show_pivotview(prefs, pivot=pivot, \
+                starred=starred))
 
 
 class ProjectNewPivot(webapp.RequestHandler):
@@ -232,19 +248,24 @@ class ProjectNewPivot(webapp.RequestHandler):
                 project=project, show_dialog=True))
 
 
-def show_pivotview(prefs, pivot, project=None, show_dialog=False):
+def show_pivotview(prefs, pivot, project=None, show_dialog=False, \
+        starred=None):
     key = random.randint(0, 100000000000000)
     if isinstance(pivot, Pivot):
         memcache.set("_pivotpreview-%s" % key, pivot.css)
 
-    starred = Star.all().filter("userprefs =", prefs) \
-            .filter("pivot =", pivot).get()
+    # Helper to avoid reading from db right after writing
+    if starred:
+        _starred = starred
+    else:
+        _starred = Star.all().filter("userprefs =", prefs) \
+                .filter("pivot =", pivot).count()
 
     webapp.template.register_template_library('common.templateaddons')
     return template.render(tdir + "pivot.html", \
             {"prefs": prefs, 'key': key, 'pivot': pivot, \
             'project': project, 'showdialog': show_dialog, \
-            'starred': starred})
+            'starred': _starred})
 
 
 class PivotDetails(webapp.RequestHandler):

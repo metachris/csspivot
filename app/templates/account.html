@@ -25,7 +25,7 @@ $(document).ready(function() {
 <td width="260px" style="text-align:left;"><p>Starred pivots</p>
 <ul style="text-align:left;">
     {% for star in prefs.star_set %}
-    <li><a href="/{{ pivot.id }}">{{ star.pivot.id }}</a> &middot; <small>{{ star.pivot.project.url|truncate_chars:26 }} &middot; {{ star.pivot.css|styles_count }} style{{ pivot.css|styles_count|pluralize }}</small></li>
+    <li><a href="/{{ star.pivot.id }}">{{ star.pivot.id }}</a> &middot; <small>{{ star.pivot.project.url|truncate_chars:26 }} &middot; {{ star.pivot.css|styles_count }} style{{ pivot.css|styles_count|pluralize }}</small></li>
     {% endfor %}
 </ul>
 </td>
