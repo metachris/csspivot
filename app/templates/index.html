@@ -157,6 +157,8 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 <div id="_heavy" style="display:none;"><ul>{% for cnt,pivot in heavy %}<li><a href="/{{ pivot.id }}" title="{{ pivot.url }}"><code>{{ pivot.id }}</code></a> &middot; <small>{{ pivot.url|truncate_chars:26 }} &middot; {{ pivot.styles_count }} change{{ pivot.styles_count|pluralize }}</small>{% endfor %}</div>
 <div id="_topdomains" style="display:none;"><ul>{% for domain in topdomains %}<li><a href="/d/{{ domain.url_domain_base }}">{{ domain.url_domain_base }}</a>: {{ domain.pivot_count }} pivot{{ domain.pivot_count|pluralize }}</small>{% endfor %}</div>
 <div id="_examples" style="display:none;"><ul>
+
+<li><a href="http://www.csspivot.com/fh2V1">Pro-Android peut-être ?</a></li>
 <li><a href="http://www.csspivot.com/49KP9">Metafilter Variation</a></li>
 <li><a href="http://www.csspivot.com/163IX">Blog Readability</a></li>
 <li><a href="http://www.csspivot.com/GMKAW">Reddit Pivot</a></li>
