@@ -34,7 +34,7 @@
         	       {% endif %}
                 </li>
                 {% if prefs %}
-                    <li><a href="/account">{{ prefs.nickname }}</a></li>
+                    <li><a href="/account">{{ prefs.nickname|truncate_chars:20 }}</a></li>
                 {% else %}
                     <li><a href="javascript:signin('/{{ pivot.id }}')" title="A user account lets you manage your pivots and much more!">sign in</a></li>
                 {% endif %}
