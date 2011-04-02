@@ -17,13 +17,35 @@ $(document).ready(function() {
 </style>
 
 <div id="settings" style="margin:40px 20px 0px 148px; text-align:left; font-size:15px;">
+{% if error %}
+<div class="ui-widget" style="margin-bottom:30px">
+    <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 6px;""> 
+    	<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .7em; margin-top:2px;"></span> 
+		<small><strong>Error:</strong>
+		  {% ifequal error "u1" %}Username too short{% endifequal %}
+		  {% ifequal error "u2" %}Username already taken{% endifequal %}
+		</small>
+    </div>
+</div>
+{% endif %}
+{% if action %}
+<div class="ui-widget" style="margin-bottom:30px">
+	<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 6px;"> 
+		<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em; margin-top:2px;"></span>
+		<small>{% ifequal action "u" %}Username updated{% endifequal %}</small>
+	</div>
+</div>
+{% endif %}
 
+
+<form action="/account/settings" method="post">
 <table>
 
-<tr><td>Username:</td><td><input type="text" name="username" style="padding:3px;" value="{{ prefs.nickname }}" disabled=disabled /></td></tr>
+<tr><td>Username:</td><td><input type="text" name="username" style="padding:3px;" value="{{ prefs.nickname }}" /></td></tr>
 <tr><td>Email Address:</td><td><input type="text" name="email" style="padding:3px;" value="{{ prefs.email }}"  disabled=disabled /></td></tr>
-<tr><td></td><td><br><br>Coming tomorrow!</td></tr>
+<tr><td></td><td><br><input type="submit" class="btn" value="Update" /></td></tr>
 
 </tr></table>
+</form>
 </div>
 {% endblock %}

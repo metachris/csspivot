@@ -28,7 +28,39 @@ class AccountSettingsView(webapp.RequestHandler):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
         logging.info(prefs)
+        error = decode(self.request.get('e'))
+        action = decode(self.request.get('a'))
+
         webapp.template.register_template_library('common.templateaddons')
         self.response.out.write(template.render(tdir + \
                 "account_settings.html",
-                {"prefs": prefs}))
+                {"prefs": prefs, "error": error, "action": action}))
+
+    def post(self):
+        # update user profile
+        user = users.get_current_user()
+        prefs = InternalUser.from_user(user)
+
+        username = decode(self.request.get('username'))
+        logging.info("update username for %s to %s" % (prefs, username))
+
+        if username and len(username) > 2:
+            if username == prefs.nickname:
+                self.redirect("/account/settings")
+                return
+
+            # check
+            q = InternalUser.all().filter("nickname =", username).get()
+            if q:
+                # nickname already taken
+                self.redirect("/account/settings?e=u2")
+                return
+
+            # update nickname now
+            prefs.nickname = username
+            prefs.put()
+            self.redirect("/account/settings?a=u")
+
+        else:
+            self.redirect("/account/settings?e=u1")
+            return

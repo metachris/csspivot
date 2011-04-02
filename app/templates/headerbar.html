@@ -36,7 +36,7 @@
                 {% if prefs %}
                     <li><a href="/account">{{ prefs.nickname }}</a></li>
                 {% else %}
-                    <li><a href="/login?continue=/{{ pivot.id }}" title="A user account lets you manage your pivots and much more!">sign in</a></li>
+                    <li><a href="javascript:signin('/{{ pivot.id }}')" title="A user account lets you manage your pivots and much more!">sign in</a></li>
                 {% endif %}
                 <li><a href="#">share</a>
                 	<ul style="left: -101px;">
