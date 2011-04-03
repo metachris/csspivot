@@ -28,6 +28,10 @@ class StarAction(webapp.RequestHandler):
         user = users.get_current_user()
         prefs = InternalUser.from_user(user)
 
+        if not prefs:
+            self.error(404)
+            return
+
         pivot_id = self.request.get('pivot_id')
         action = self.request.get('action')
         if action and pivot_id:
