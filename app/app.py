@@ -28,6 +28,7 @@ urls = [
     (r'/proxy/([-\w]+)[/]?', ProxyView),
     (r'/', Main),
     (r'/d/(.*)', DomainView),
+    (r'/a/new', ProjectNew),
     (r'/a/(.*)/new', ProjectNewPivot),
     (r'/a/(.*)', ProjectView),
     (r'/([-\w]{5,6})[/]?', PivotView),

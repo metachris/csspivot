@@ -25,6 +25,13 @@ function valid() {
         $("#info_invalidurl").show();
         return false;
     }
+    return true;
+}
+
+function create_project() {
+    if (valid()) {
+        location.href = '/a/new?url=' + $('#url').val();
+    }
 }
 
 function discover() {
@@ -42,21 +49,20 @@ var k = {% if prefs %}"{{ prefs.key }}"{% else %}""{% endif %};
 <p style="color:#777;">Invite others to submit improvements for your website</p>
 
 <form action="/preview" method="get" id="form_pivot" onsubmit="return valid()">
-<div style="padding-left:26px; margin-top:60px;">
-<div id="pivot" style="background:url(/images/inputshape2.png) top left no-repeat; width:605px; height:80px;">
-    <input type="text" name="url" id="url" style="margin-top:10px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="{% if invalid_url %}{{ invalid_url }}{% else %}http://{% endif %}" onfocus="this.value = this.value;" />
-</div>
-<div style="text-align:right; margin-top:3px;">
-
-<div style="float:left; padding-left:185px; width:140px; text-align:left; {% if not invalid_url %}display:none;{% endif %}" id="info_invalidurl">
-    <div class="ui-state-error ui-corner-all" style="padding: 4px 0px 4px .7em;">    				 
-		<span class="ui-icon ui-icon-alert" style="float:left; padding-right:10px;"></span> Not a valid url
-	</div>
-    
-</div>
-    <input type="submit" value="Open URL"  class="btn"/>
-</div>
-</div>
+    <div style="padding-left:26px; margin-top:60px;">
+        <div id="pivot" style="background:url(/images/inputshape2.png) top left no-repeat; width:605px; height:80px;">
+            <input type="text" name="url" id="url" style="margin-top:10px; width:570px; padding-left:10px; height:46px; font-size:30px; border:0px solid white;" value="{% if invalid_url %}{{ invalid_url }}{% else %}http://{% endif %}" onfocus="this.value = this.value;" />
+        </div>
+        <div style="text-align:right; margin-top:3px;">
+            <div style="float:left; padding-left:185px; width:140px; text-align:left; {% if not invalid_url %}display:none;{% endif %}" id="info_invalidurl">
+                <div class="ui-state-error ui-corner-all" style="padding: 4px 0px 4px .7em;">    				 
+            		<span class="ui-icon ui-icon-alert" style="float:left; padding-right:10px;"></span> Not a valid url
+            	</div>                
+            </div>
+           <input type="button" value="Create Project" name="project" class="btn" onclick="create_project()" />
+            <input type="submit" value="Open URL" style="font-weight:bold;" class="btn"/>
+        </div>
+    </div>
 </form>
 
 <div style="margin-top:40px;"></div>

@@ -155,12 +155,13 @@ class Main(webapp.RequestHandler):
                         project.pivot_count += 1
                         project.put()
                     else:
-                        logging.info("project not found")
+                        logging.info("project not found, creating")
                         project = Project(userprefs=prefs, \
                                 id=gen_modelhash(Project), \
                                 title=title, \
                                 url=url, \
-                                rand=random.random())
+                                rand=random.random(), \
+                                domain=domain)
 
                         domain.project_count += 1
                         project.domain = domain
@@ -315,6 +316,11 @@ class Preview(webapp.RequestHandler):
         prefs = InternalUser.from_user(user)
 
         url = decode(self.request.get('url'))
+        if decode(self.request.get('project')):
+            # Create a project instead of pivot preview
+            self.redirect("/a/new?url=%s" % url)
+            return
+
         css = urllib.unquote(decode(self.request.get('css')))
         showdialog = False if css else True  # no css = new
 

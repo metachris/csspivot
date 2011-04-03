@@ -19,7 +19,10 @@ hr { border-top:1px solid #DDD; }
 
 /* Headers (h1, h2, etc) have no default font-size or margin; define those yourself */
 h1, h2, h3, h4, h5, h6 { font-weight: normal; font-family: 'PT Sans'; font-weight:bold; }
+h1 { font-size:18px; margin-bottom:14px; }
 h2 { font-size:16px; margin-bottom:14px; }
+
+b { font-weight:bold; }
 
 a, a:active, a:visited { 
     color: #607890; 
@@ -82,10 +85,6 @@ p { margin-bottom:10px; }
 
 #csspivot a:hover {
 	
-}
-
-#csspivot a b {
-	font-weight:bold;
 }
 
 #csspivot img {

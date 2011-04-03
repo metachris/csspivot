@@ -97,6 +97,11 @@ class Project(db.Model):
     date_updated = db.DateTimeProperty(auto_now=True)
     pivot_count = db.IntegerProperty(default=1)
 
+    description = db.TextProperty()
+
+    # if a user created a blank project this is set to True
+    user_created = db.BooleanProperty(default=False)
+
 
 class Pivot(db.Model):
     userprefs = db.ReferenceProperty(InternalUser)
