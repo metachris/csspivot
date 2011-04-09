@@ -365,14 +365,20 @@ class TourView(webapp.RequestHandler):
 
 
 class ProxyView(webapp.RequestHandler):
-    def post(self):
+    def post(self, pivot_id=None):
         return self.get()
 
-    def get(self):
+    def get(self, pivot_id=None):
         """ Proxies the content for showing in an iframe """
         url = decode(self.request.get('url'))
         key = decode(self.request.get('key'))
         css = urllib.unquote(decode(self.request.get('css')))
+
+        if pivot_id:
+            pivot = Pivot.all().filter("id =", pivot_id).get()
+            if pivot:
+                url = pivot.url
+                css = pivot.css
 
         if not url:
             self.error(404)
